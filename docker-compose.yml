@@ -1,0 +1,53 @@
+services:
+  frontend:
+    build:
+      context: ./sample_frontend_container
+      dockerfile: Dockerfile
+    container_name: sample_frontend_container
+    volumes:
+      - ./sample_frontend_container:/app
+    ports:
+      - "3000:3000"
+      - "5173:5173"
+    tty: true   # コンテナをデバッグ用に起動状態に保つ
+    # command: ["npm", "run", "dev"]
+    # command: ["npm", "start"]
+    # depends_on:
+    #   - backend
+
+#   backend:
+#     container_name: sample_backend_container
+#     image: sample_backend_image
+#     build:
+#       context: ./sample_backend_container
+#       dockerfile: Dockerfile
+#     volumes:
+#       - ./sample_backend_container:/app
+#     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+#     working_dir: /app
+#     ports:
+#       - 8000:8000
+#     tty: true
+#     depends_on:
+#       - db
+
+
+#   db:
+#     image: postgres:13
+#     container_name: postgres_db
+#     environment:
+#       POSTGRES_DB: sample_db
+#       POSTGRES_USER: sample_user
+#       POSTGRES_PASSWORD: sample_password
+#       TZ: Asia/Tokyo
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#       # テスト用のDB構築スクリプト
+#       - ./init-scripts:/docker-entrypoint-initdb.d
+#     ports:
+#       - "5432:5432"
+
+# volumes:
+#   postgres_data:
+
+
