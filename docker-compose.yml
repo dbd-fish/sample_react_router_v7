@@ -1,0 +1,55 @@
+services:
+  frontend:
+    build:
+      context: ./sample_frontend_container
+      dockerfile: Dockerfile
+    container_name: sample_frontend_container
+    volumes:
+      - ./sample_frontend_container:/app
+    ports:
+      - "3000:3000" # 本番用
+      - "5173:5173" # 開発用
+    # tty: true   # コンテナをデバッグ用に起動状態に保つ場合は設定
+    # 下記は開発用
+    command: ["npm", "run", "dev", "--", "--host"]
+    # 下記は本番用
+    # command: >
+    #   sh -c "npx remix vite:build &&
+    #          npx remix-serve build/server/index.js"
+
+#   backend:
+#     container_name: sample_backend_container
+#     image: sample_backend_image
+#     build:
+#       context: ./sample_backend_container
+#       dockerfile: Dockerfile
+#     volumes:
+#       - ./sample_backend_container:/app
+#     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+#     working_dir: /app
+#     ports:
+#       - 8000:8000
+#     tty: true
+#     depends_on:
+#       - db
+
+
+#   db:
+#     image: postgres:13
+#     container_name: postgres_db
+#     environment:
+#       POSTGRES_DB: sample_db
+#       POSTGRES_USER: sample_user
+#       POSTGRES_PASSWORD: sample_password
+#       TZ: Asia/Tokyo
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#       # テスト用のDB構築スクリプト
+#       - ./init-scripts:/docker-entrypoint-initdb.d
+#     ports:
+#       - "5432:5432"
+
+# volumes:
+#   postgres_data:
+
+
