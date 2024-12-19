@@ -7,13 +7,15 @@ services:
     volumes:
       - ./sample_frontend_container:/app
     ports:
-      - "3000:3000"
-      - "5173:5173"
-    tty: true   # コンテナをデバッグ用に起動状態に保つ
-    # command: ["npm", "run", "dev"]
-    # command: ["npm", "start"]
-    # depends_on:
-    #   - backend
+      - "3000:3000" # 本番用
+      - "5173:5173" # 開発用
+    # tty: true   # コンテナをデバッグ用に起動状態に保つ場合は設定
+    # 下記は開発用
+    command: ["npm", "run", "dev", "--", "--host"]
+    # 下記は本番用
+    # command: >
+    #   sh -c "npx remix vite:build &&
+    #          npx remix-serve build/server/index.js"
 
 #   backend:
 #     container_name: sample_backend_container

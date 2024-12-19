@@ -16,5 +16,5 @@ WORKDIR /app/sample_remix_react
 RUN npm install
 
 # デフォルトのCMDをbashにしておく（デバッグや後の変更用）
-CMD ["bash"]
+# CMD ["bash"]
 
