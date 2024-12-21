@@ -34,7 +34,7 @@ jobs:
 
       - name: Run eslint in frontend Container
         run: |
-          docker exec sample_frontend_container bash -c "cd sample_remix_react && export NODE_OPTIONS='--max-old-space-size=4096' && npm run lint"
+          docker exec sample_frontend_container bash -c "cd sample_remix_react && npm run lint"
         # sample_remix_react ディレクトリに移動してから lint を実行
 
       - name: Run prettier in frontend Container
