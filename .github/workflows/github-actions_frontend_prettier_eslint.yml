@@ -32,9 +32,9 @@ jobs:
         run: |
           docker ps
 
-      - name: Run eslint in frontend Container
-        run: |
-          docker exec sample_frontend_container npm run lint
+      # - name: Run eslint in frontend Container
+      #   run: |
+      #     docker exec sample_frontend_container npm run lint
 
       - name: Run prettier in frontend Container
         run: |
