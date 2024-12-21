@@ -22,16 +22,24 @@ jobs:
         # リポジトリのコードをチェックアウトします。
         # 後続のステップでコードベースにアクセスするための準備です。
 
-      - name: Install Docker Compose
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        # 最新のDocker環境とBuildxをセットアップします。
+        # Docker Compose v2も含まれます。
+
+      - name: Install Docker Compose v2
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-compose
-        # Docker Composeをインストール
+          sudo apt-get install -y docker-compose-plugin
+          sudo ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
+        # Docker Compose v2をインストールし、必要に応じてエイリアスを設定します。
+        # `docker compose`コマンドを従来の`docker-compose`と互換性を持たせるためにリンクを作成。
 
       - name: Set up frontend Container
         run: |
-          docker-compose up -d frontend
+          docker compose up -d frontend
         # docker-compose.ymlを使用して、frontendコンテナのみ立ち上げる
+        # Docker Compose v2では`docker compose`コマンドが推奨されます。
 
       - name: Check frontend Container
         run: |
@@ -41,10 +49,10 @@ jobs:
 
       - name: Run eslint in frontend Container
         run: |
-          docker exec sample_frontend_container npm run format
-        # frontendコンテナ内でruffを実行
+          docker exec sample_frontend_container npm run lint
+        # frontendコンテナ内でESLintを実行
 
       - name: Run prettier in frontend Container
         run: |
-          docker exec sample_frontend_container npm run lint
-        # frontendコンテナ内でmypyを実行
+          docker exec sample_frontend_container npm run format
+        # frontendコンテナ内でPrettierを実行
