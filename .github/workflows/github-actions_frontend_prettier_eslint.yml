@@ -34,7 +34,7 @@ jobs:
 
       - name: Run eslint in frontend Container
         run: |
-          docker exec react_sample-frontend npm run lint
+          docker exec sample_frontend_container bash -c "export NODE_OPTIONS='--max-old-space-size=4096' && npm run lint"
 
       - name: Run prettier in frontend Container
         run: |
