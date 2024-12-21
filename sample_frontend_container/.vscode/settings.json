@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    // "source.fixAll.eslint": "explicit"
   },
   // プロジェクトがマウントしているディレクトリ直下ではないため、下記のようにターミナルの初期ディレクトリを指定
   "terminal.integrated.cwd": "/app/sample_remix_react",
@@ -15,5 +15,6 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "eslint.useESLintClass": true
 }
