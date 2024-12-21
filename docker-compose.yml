@@ -11,7 +11,7 @@ services:
       - "5173:5173" # 開発用
     # tty: true   # コンテナをデバッグ用に起動状態に保つ場合は設定
     # 下記は開発用
-    command: ["npm", "run", "dev", "--", "--host"]
+    command: ["npm", "run", "dev"]
     # 下記は本番用
     # command: >
     #   sh -c "npx remix vite:build &&
