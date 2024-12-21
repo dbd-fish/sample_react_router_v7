@@ -14,37 +14,33 @@ jobs:
   eslint_and_prettier:
     name: Lint and Type Check
     runs-on: ubuntu-latest
-    # ジョブをUbuntu最新環境で実行します。
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        # リポジトリのコードをチェックアウトします。
-        # 後続のステップでコードベースにアクセスするための準備です。
 
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
-        # Docker Composeをインストール
+
+      - name: Add swap space
+        run: |
+          sudo fallocate -l 2G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
 
       - name: Set up frontend Container
         run: |
           docker-compose up -d frontend
-        # docker-compose.ymlを使用して、frontendコンテナのみ立ち上げる
-
-      - name: Check frontend Container
-        run: |
-          docker ps
-        # 起動中のDockerコンテナを一覧表示します。
-        # frontendコンテナが正しく起動しているかを確認
 
       - name: Run eslint in frontend Container
         run: |
-          docker exec sample_frontend_container npm run format
-        # frontendコンテナ内でruffを実行
+          CONTAINER_ID=$(docker ps -qf "name=sample_frontend_container")
+          docker exec $CONTAINER_ID npm run format
 
       - name: Run prettier in frontend Container
         run: |
-          docker exec sample_frontend_container npm run lint
-        # frontendコンテナ内でmypyを実行
+          CONTAINER_ID=$(docker ps -qf "name=sample_frontend_container")
+          docker exec $CONTAINER_ID npm run lint
