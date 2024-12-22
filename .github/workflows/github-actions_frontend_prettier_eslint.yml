@@ -15,7 +15,7 @@ jobs:
       runner_memorylimit: 12k
       # runner_cpurequest: 800m
       # runner_cpulimit: 1600m
-    runs-on: linux
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
