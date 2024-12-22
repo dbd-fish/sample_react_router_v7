@@ -24,12 +24,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose-plugin
 
-      - name: Set up frontend Container
-        run: |
-          docker compose up -d frontend
+      # Docker システムのプルーニング
+      - name: Clean Docker system
+        run: docker system prune -af
 
-      - name: Check frontend Container
+      # メモリ使用量の確認
+      - name: Check available memory
+        run: free -h
+
+      # Dockerコンテナの起動時にメモリ制限を設定
+      - name: Set up frontend Container with memory limits
         run: |
+          docker compose up -d --build frontend
+          docker update --memory 8G --memory-swap 8G sample_frontend_container
+
+      - name: Wait for container to be ready
+        run: |
+          sleep 30
           docker ps
 
       - name: Run eslint in frontend Container
