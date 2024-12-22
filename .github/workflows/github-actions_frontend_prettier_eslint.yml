@@ -32,17 +32,12 @@ jobs:
         run: |
           docker ps
 
-      - name: Change to sample_remix_react directory in container
-        run: |
-          docker exec sample_frontend_container bash -c "cd sample_remix_react && pwd"
-        # sample_remix_reactディレクトリに移動し、現在のディレクトリを出力
-
       - name: Run eslint in frontend Container
         run: |
           docker exec sample_frontend_container bash -c "cd sample_remix_react && export NODE_OPTIONS='--max-old-space-size=4096' && npm run lint"
-        # eslintを実行
+        # sample_remix_react ディレクトリに移動してから lint を実行
 
       - name: Run prettier in frontend Container
         run: |
           docker exec sample_frontend_container bash -c "cd sample_remix_react && npm run format"
-        # prettierを実行
+        # sample_remix_react ディレクトリに移動してから format を実行
