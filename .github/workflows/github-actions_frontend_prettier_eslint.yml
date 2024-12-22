@@ -32,3 +32,8 @@ jobs:
         run: |
           cd sample_frontend_container/sample_remix_react
           npm run format:check
+
+      - name: TypeScript型チェックを実行
+        run: |
+          cd sample_frontend_container/sample_remix_react
+          npm run typecheck
