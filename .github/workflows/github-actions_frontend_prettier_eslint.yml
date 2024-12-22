@@ -24,25 +24,30 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose-plugin
 
-      - name: Set up frontend Container
-        run: |
-          docker compose up -d frontend
+      # Docker システムのプルーニング
+      - name: Clean Docker system
+        run: docker system prune -af
 
-      - name: Check frontend Container
+      # メモリ使用量の確認
+      - name: Check available memory
+        run: free -h
+
+      # Dockerコンテナの起動時にメモリ制限を設定
+      - name: Set up frontend Container with memory limits
         run: |
+          docker compose up -d --build frontend
+          docker update --memory 8G --memory-swap 8G sample_frontend_container
+
+      - name: Wait for container to be ready
+        run: |
+          sleep 30
           docker ps
-
-      - name: Change to sample_remix_react directory in container
-        run: |
-          docker exec sample_frontend_container ls
-        # sample_remix_reactディレクトリに移動し、現在のディレクトリを出力
+          docker logs sample_frontend_container
 
       - name: Run eslint in frontend Container
         run: |
-          docker exec sample_frontend_container bash -c "cd sample_remix_react && export NODE_OPTIONS='--max-old-space-size=4096' && npm run lint"
-        # eslintを実行
+          docker exec sample_frontend_container bash -c "cd sample_remix_react && export NODE_OPTIONS='--max-old-space-size=2048' && npm run lint"
 
       - name: Run prettier in frontend Container
         run: |
           docker exec sample_frontend_container bash -c "cd sample_remix_react && npm run format"
-        # prettierを実行

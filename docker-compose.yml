@@ -4,6 +4,10 @@ services:
       context: ./sample_frontend_container
       dockerfile: Dockerfile
     container_name: sample_frontend_container
+    deploy:
+      resources:
+        limits:
+          memory: 8G
     volumes:
       - ./sample_frontend_container:/app
     ports:
