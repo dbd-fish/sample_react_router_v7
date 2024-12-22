@@ -1,0 +1,20 @@
+{
+  "editor.codeActionsOnSave": {
+    // "source.fixAll.eslint": "explicit"
+  },
+  // プロジェクトがマウントしているディレクトリ直下ではないため、下記のようにターミナルの初期ディレクトリを指定
+  "terminal.integrated.cwd": "/app/sample_remix_react",
+  "editor.formatOnSaveMode": "file",
+  "files.autoSaveWhenNoErrors": true,
+
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.format.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.useESLintClass": true
+}
