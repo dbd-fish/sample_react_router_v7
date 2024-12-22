@@ -34,7 +34,7 @@ jobs:
 
       - name: Change to sample_remix_react directory in container
         run: |
-          docker exec sample_frontend_container bash -c "cd sample_remix_react && pwd"
+          docker exec sample_frontend_container ls
         # sample_remix_reactディレクトリに移動し、現在のディレクトリを出力
 
       - name: Run eslint in frontend Container
