@@ -1,8 +1,12 @@
 name: Lint and Format Check
 
+
 on:
   pull_request:
-  workflow_dispatch:
+    branches:
+      - main  # マージ先のブランチを指定
+    types:
+      - closed
 
 jobs:
   lint_and_format:
