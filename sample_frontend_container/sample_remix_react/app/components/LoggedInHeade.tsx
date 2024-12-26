@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
-import SearchForm from '../components/forms/SearchForm';
-import SiteTitle from '../components/SiteTitle';
+import SearchForm from './forms/SearchForm';
+import SiteTitle from './SiteTitle';
 import useClickOutside from '../hooks/useClickOutside';
 
 export default function Header() {
