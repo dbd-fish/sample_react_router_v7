@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
-import SearchForm from './forms/SearchForm';
-import SiteTitle from './SiteTitle';
-import useClickOutside from '../hooks/useClickOutside';
+import SearchForm from '../forms/SearchForm';
+import SiteTitle from '../SiteTitle';
+import useClickOutside from '../../hooks/useClickOutside';
 
 export default function Header() {
   const [showUserMenu, setShowUserMenu] = useState(false);

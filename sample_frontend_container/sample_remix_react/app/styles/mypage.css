@@ -1,25 +1,24 @@
 .mypage {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
-  .profile-card {
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    background-color: #f9f9f9;
-  }
-  
-  .profile-card h2 {
-    margin: 0 0 0.5rem;
-  }
-  
-  .profile-card p {
-    margin: 0;
-  }
-  
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.profile-card {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+}
+
+.profile-card h2 {
+  margin: 0 0 0.5rem;
+}
+
+.profile-card p {
+  margin: 0;
+}

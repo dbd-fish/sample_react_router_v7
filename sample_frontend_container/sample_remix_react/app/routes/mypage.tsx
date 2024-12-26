@@ -1,4 +1,4 @@
-import Header from '../components/LoggedInHeade';
+import Header from '../components/header/LoggedInHeade';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
 
