@@ -1,6 +1,42 @@
+import React, { useState } from 'react';
+
 export default function LoginForm() {
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    const loginData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        // ログイン成功時にプログラム的にリダイレクトを実行
+        window.location.href = '/mypage';
+      } else {
+        console.error('ログイン失敗:', response.statusText);
+      }
+    } catch (error) {
+      console.error('エラーが発生しました:', error);
+    }
+  };
+
   return (
-    <form className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label
           htmlFor="email"
@@ -12,8 +48,11 @@ export default function LoginForm() {
           type="email"
           id="email"
           name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           placeholder="example@example.com"
+          required
         />
       </div>
       <div>
@@ -29,6 +68,7 @@ export default function LoginForm() {
           name="password"
           className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           placeholder="********"
+          required
         />
       </div>
       <div className="flex items-center justify-between">
