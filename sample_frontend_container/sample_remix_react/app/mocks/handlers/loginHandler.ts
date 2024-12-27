@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 
 // ログインリクエストのボディの型定義
 export interface LoginRequestBody {
-  email: string;    // ユーザーのメールアドレス
+  email: string; // ユーザーのメールアドレス
   password: string; // ユーザーのパスワード
 }
 
@@ -33,8 +33,8 @@ export const loginHandler = http.post('/api/login', async ({ request }) => {
         status: 302,
         headers: {
           'Content-Type': 'application/json', // レスポンスの内容がJSONであることを示す
-          'Set-Cookie': setCookieHeader,      // クライアントにJWTを含むクッキーを設定
-          Location: '/mypage',                // クライアントがリダイレクトすべきURLを指定
+          'Set-Cookie': setCookieHeader, // クライアントにJWTを含むクッキーを設定
+          Location: '/mypage', // クライアントがリダイレクトすべきURLを指定
         },
       },
     );
