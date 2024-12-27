@@ -7,6 +7,10 @@ export interface LoginRequestBody {
   password: string; // ユーザーのパスワード
 }
 
+// 許可されたメールアドレスとパスワードを定義
+const VALID_EMAIL = 'user@example.com';
+const VALID_PASSWORD = 'securepassword';
+
 // /api/login エンドポイントへのPOSTリクエストを処理するハンドラーを定義
 export const loginHandler = http.post('/api/login', async ({ request }) => {
   try {
@@ -17,38 +21,50 @@ export const loginHandler = http.post('/api/login', async ({ request }) => {
     console.log('Received email:', email);
     console.log('Received password:', password);
 
-    // 本来はここでメールアドレスとパスワードの検証を行う（例：データベースとの照合）
-    // 検証が成功したと仮定して、JWT（JSON Web Token）を生成
-    const jwt = 'your_jwt_token'; // 実際の実装では、適切な方法でJWTを生成してください
+    // メールアドレスとパスワードの検証
+    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+      // 検証が成功した場合、JWT（JSON Web Token）を生成
+      const jwt = 'your_jwt_token'; // 実際の実装では、適切な方法でJWTを生成してください
 
-    // クッキーの設定を定義
-    const setCookieHeader = `authToken=${jwt}; HttpOnly; Secure; SameSite=Lax; Path=/`;
+      // クッキーの設定を定義
+      const setCookieHeader = `authToken=${jwt}; HttpOnly; Secure; SameSite=Lax; Path=/`;
 
-    // 成功レスポンスを返す
-    return new HttpResponse(
-      // レスポンスボディとしてJSON形式のメッセージを設定
-      JSON.stringify({ message: 'Logged in successfully' }),
-      {
-        // HTTPステータスコードを302（Found）に設定し、リダイレクトを示す
-        status: 302,
-        headers: {
-          'Content-Type': 'application/json', // レスポンスの内容がJSONであることを示す
-          'Set-Cookie': setCookieHeader, // クライアントにJWTを含むクッキーを設定
+      // 成功レスポンスを返す
+      return new HttpResponse(
+        // レスポンスボディとしてJSON形式のメッセージを設定
+        JSON.stringify({ message: 'Logged in successfully' }),
+        {
+          // HTTPステータスコードを200（OK）に設定
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json', // レスポンスの内容がJSONであることを示す
+            'Set-Cookie': setCookieHeader, // クライアントにJWTを含むクッキーを設定
+          },
         },
-      },
-    );
+      );
+    } else {
+      // 認証情報が無効な場合のエラーレスポンス
+      return new HttpResponse(
+        JSON.stringify({ message: 'ユーザ名またはパスワードが違います' }),
+        {
+          status: 401, // HTTPステータスコードを401（Unauthorized）に設定
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    }
   } catch (error) {
     // リクエストボディのパース中にエラーが発生した場合の処理
     console.error('Error parsing request body:', error);
 
     // エラーレスポンスを返す
     return new HttpResponse(
-      // エラーメッセージをJSON形式で設定
       JSON.stringify({ message: 'Invalid request body' }),
       {
         status: 400, // HTTPステータスコードを400（Bad Request）に設定
         headers: {
-          'Content-Type': 'application/json', // レスポンスの内容がJSONであることを示す
+          'Content-Type': 'application/json',
         },
       },
     );
