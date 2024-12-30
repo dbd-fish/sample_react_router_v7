@@ -6,8 +6,8 @@ const MOCK_USER = {
   email: 'mockuser@example.com',
 };
 
-// /api/get/me エンドポイントへのpostリクエストを処理するハンドラー
-export const getMeHandler = http.post('/api/get/me', ({ cookies }) => {
+// /api/get/me エンドポイントへのgetリクエストを処理するハンドラー
+export const getMeHandler = http.get('/api/get/me', ({ cookies }) => {
   console.log('/api/get/me Cookies:', cookies);
   const authToken = cookies['authToken'];
 

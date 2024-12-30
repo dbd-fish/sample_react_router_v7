@@ -5,17 +5,19 @@ import { useUser } from '../context/UserContext';
 export const useAuth = () => {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
-  console.log('ddd useAuth:', user);  // ユーザー情報をログに出力
+  console.log('useAuth useAuth:', user); // ユーザー情報をログに出力
   useEffect(() => {
     const validateToken = async () => {
       try {
         const response = await fetch('/api/get/me', {
-          method: 'POST',
+          method: 'GET',
           headers: { 'Content-Type': 'application/json' }, // JSON形式のリクエストボディを指定
           credentials: 'include', // Cookieを送信
         });
+        console.log('useAuth response', response);
 
         if (response.ok) {
+          console.log('useAuth response.ok');
           const data = await response.json();
           // コンテキストにemailとusernameを保存
           setUser({
@@ -23,20 +25,20 @@ export const useAuth = () => {
             email: data.email,
           });
         } else {
+          console.log('useAuth response.ng');
           const errorData = await response.json();
-          console.log('ddd errorData:', errorData);
+          console.log('useAuth errorData:', errorData);
           // navigate('/login'); // トークンが無効の場合はログインページへ
         }
       } catch (error) {
-        console.error('Token validation failed:', error);
-        console.log('ddd errorData:');
+        console.error('useAuth Token validation failed:', error);
+        console.log('useAuth errorData:');
         // navigate('/login'); // エラー時もログインページへ
-      } finally {
       }
     };
 
     validateToken();
-  }, [navigate, setUser,]);
+  }, [navigate, setUser]);
 
   return user;
 };
