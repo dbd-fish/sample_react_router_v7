@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from '@remix-run/react';
 
 // LoginFormコンポーネントのプロパティ型定義
 interface LoginFormProps {
@@ -12,8 +13,9 @@ interface LoginFormProps {
  * - ログイン失敗時にはエラーメッセージを親コンポーネントに伝える
  */
 export default function LoginForm({ setError }: LoginFormProps) {
-  // メールアドレスを管理する状態
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate(); // useNavigateフックを取得
+
+  const [email, setlocalEmail] = useState(''); // 状態管理用
 
   /**
    * フォーム送信時の処理
@@ -40,8 +42,7 @@ export default function LoginForm({ setError }: LoginFormProps) {
       });
 
       if (response.ok) {
-        // レスポンスが成功の場合、マイページにリダイレクト
-        window.location.href = '/mypage';
+        navigate('/mypage'); // リダイレクト
       } else {
         // レスポンスが失敗の場合、エラーメッセージを取得して親コンポーネントに通知
         const errorData = await response.json();
@@ -58,7 +59,10 @@ export default function LoginForm({ setError }: LoginFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* メールアドレス入力フィールド */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700"
+        >
           メールアドレス
         </label>
         <input
@@ -66,7 +70,7 @@ export default function LoginForm({ setError }: LoginFormProps) {
           id="email"
           name="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)} // 入力値を状態に反映
+          onChange={(e) => setlocalEmail(e.target.value)} // 入力値を状態に反映
           className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           placeholder="example@example.com"
           required // 必須フィールド
@@ -75,7 +79,10 @@ export default function LoginForm({ setError }: LoginFormProps) {
 
       {/* パスワード入力フィールド */}
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700"
+        >
           パスワード
         </label>
         <input
