@@ -8,6 +8,7 @@ import {
 import type { LinksFunction } from '@remix-run/node';
 
 import './tailwind.css';
+import { UserProvider } from './context/UserContext';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -41,5 +42,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <UserProvider>
+        {/* 他のコンポーネント */}
+        <Outlet />
+    </UserProvider>
+  );
 }

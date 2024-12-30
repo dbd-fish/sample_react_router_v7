@@ -9,7 +9,7 @@ const Header = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch('/auth-status', {
+        const response = await fetch('/api/get/me', {
           method: 'GET',
           credentials: 'include', // クッキーを含めるための設定
         });
