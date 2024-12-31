@@ -3,6 +3,7 @@ import SearchForm from '../forms/SearchForm'; // 検索フォームのコンポ�
 import SiteTitle from '../SiteTitle'; // サイトタイトル用のコンポーネントをインポート
 import useClickOutside from '../../hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
 import { useUser } from '../../context/UserContext'; // ユーザー情報を管理するコンテキストから情報を取得
+import { useLogout } from '../../hooks/useLogout'; // ログアウト処理をカスタムフックからインポート
 
 /**
  * ヘッダーコンポーネント
@@ -11,7 +12,8 @@ import { useUser } from '../../context/UserContext'; // ユーザー情報を管
  */
 export default function Header() {
   // コンテキストからユーザー情報を取得
-  const { user } = useUser(); 
+  const { user } = useUser();
+  const logout = useLogout(); // カスタムフックからログアウト処理を取得
 
   // 通知メニューとユーザーメニューの表示状態を管理
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -53,38 +55,26 @@ export default function Header() {
                 className="relative w-10 h-10 rounded-full bg-white flex justify-center items-center hover:bg-gray-200"
               >
                 🔔
-                {/* 通知数を表示 */}
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
                   3
                 </span>
               </button>
-              {/* 通知メニュー */}
               {showNotification && (
                 <div className="absolute top-12 left-0 bg-white text-black rounded shadow-md w-64 p-4">
                   <p className="text-sm font-bold">新しい通知:</p>
                   <ul className="mt-2 space-y-1 text-sm">
-                    {/* 通知項目 */}
                     <li>
-                      <a
-                        href="/notification/1"
-                        className="text-blue-600 hover:underline"
-                      >
+                      <a href="/notification/1" className="text-blue-600 hover:underline">
                         通知1
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="/notification/2"
-                        className="text-blue-600 hover:underline"
-                      >
+                      <a href="/notification/2" className="text-blue-600 hover:underline">
                         通知2
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="/notification/3"
-                        className="text-blue-600 hover:underline"
-                      >
+                      <a href="/notification/3" className="text-blue-600 hover:underline">
                         通知3
                       </a>
                     </li>
@@ -106,23 +96,27 @@ export default function Header() {
                   className="w-full h-full object-cover"
                 />
               </button>
-              {/* ユーザーメニュー */}
               {showUserMenu && (
                 <div className="absolute top-12 right-0 bg-white text-black rounded shadow-md w-48 p-4">
                   <ul className="space-y-2 text-sm">
-                    {/* メニュー項目 */}
                     <li>
                       <a href="/" className="text-blue-600 hover:underline">
                         ホーム
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="/settings"
-                        className="text-blue-600 hover:underline"
-                      >
+                      <a href="/settings" className="text-blue-600 hover:underline">
                         設定
                       </a>
+                    </li>
+                    <li>
+                      {/* ログアウトボタン */}
+                      <button
+                        onClick={logout} // カスタムフックから取得したログアウト処理を実行
+                        className="text-red-600 hover:underline w-full text-left"
+                      >
+                        ログアウト
+                      </button>
                     </li>
                   </ul>
                 </div>
