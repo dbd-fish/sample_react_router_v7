@@ -2,34 +2,18 @@
 import { useState, useEffect } from 'react';
 import LoggedInHeader from './header/LoggedInHeade';
 import LoggedOutHeader from './header/LoggedOutHeader';
+import { useUser } from '../context/UserContext'; // ユーザー情報を管理するコンテキストから情報を取得
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // コンテキストからユーザー情報を取得
+  const { user } = useUser();
+  // const  user  = null;
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await fetch('/api/get/me', {
-          method: 'GET',
-          credentials: 'include', // クッキーを含めるための設定
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setIsLoggedIn(data.isAuthenticated);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error('認証状態の確認中にエラーが発生しました:', error);
-        setIsLoggedIn(false);
-      }
-    };
-
-    checkAuthStatus();
-  }, []);
-
-  return isLoggedIn ? <LoggedInHeader /> : <LoggedOutHeader />;
-};
+  // 認証状況に応じて表示を切り替える
+  if (user) {
+    return <LoggedInHeader />;
+  } else {
+    return <LoggedOutHeader />;
+  }};
 
 export default Header;

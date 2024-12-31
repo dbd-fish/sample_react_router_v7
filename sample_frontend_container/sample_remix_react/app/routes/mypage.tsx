@@ -1,5 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
-import Header from '../components/header/LoggedInHeade';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
 
