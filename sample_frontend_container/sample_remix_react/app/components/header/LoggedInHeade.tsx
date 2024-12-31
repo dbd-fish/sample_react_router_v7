@@ -1,30 +1,50 @@
 import { useState, useRef } from 'react';
-import SearchForm from '../forms/SearchForm';
-import SiteTitle from '../SiteTitle';
-import useClickOutside from '../../hooks/useClickOutside';
+import SearchForm from '../forms/SearchForm'; // 検索フォームのコンポーネントをインポート
+import SiteTitle from '../SiteTitle'; // サイトタイトル用のコンポーネントをインポート
+import useClickOutside from '../../hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
+import { useUser } from '../../context/UserContext'; // ユーザー情報を管理するコンテキストから情報を取得
 
+/**
+ * ヘッダーコンポーネント
+ * - サイト全体のヘッダーとして機能
+ * - ユーザー情報、通知、検索フォームを含む
+ */
 export default function Header() {
+  // コンテキストからユーザー情報を取得
+  const { user } = useUser(); 
+
+  // 通知メニューとユーザーメニューの表示状態を管理
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
 
+  // メニューのDOM要素を参照するためのRef
   const userMenuRef = useRef<HTMLLIElement>(null);
   const notificationRef = useRef<HTMLLIElement>(null);
 
   // カスタムフックを使用して外部クリックを検知
+  // ユーザーメニューが開いているときに外部クリックで閉じる
   useClickOutside(userMenuRef, () => setShowUserMenu(false));
+  // 通知メニューが開いているときに外部クリックで閉じる
   useClickOutside(notificationRef, () => setShowNotification(false));
 
+  // ユーザーメニューの開閉を切り替える
   const toggleUserMenu = () => setShowUserMenu(!showUserMenu);
+
+  // 通知メニューの開閉を切り替える
   const toggleNotification = () => setShowNotification(!showNotification);
 
   return (
     <header className="bg-blue-600 text-white py-4 shadow-md">
       <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-        {/* サンプルサイト (SiteTitle コンポーネント) */}
+        {/* サイトタイトル */}
         <SiteTitle />
+        {/* ユーザー情報を表示 */}
+        <span>こんにちは、{user?.username}さん</span>
+
         <nav className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-          {/* 分割したSearchFormコンポーネントを使用 */}
+          {/* 検索フォーム */}
           <SearchForm />
+
           <ul className="flex flex-row items-center space-x-4">
             {/* 通知アイコン */}
             <li className="relative" ref={notificationRef}>
@@ -33,14 +53,17 @@ export default function Header() {
                 className="relative w-10 h-10 rounded-full bg-white flex justify-center items-center hover:bg-gray-200"
               >
                 🔔
+                {/* 通知数を表示 */}
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
                   3
                 </span>
               </button>
+              {/* 通知メニュー */}
               {showNotification && (
                 <div className="absolute top-12 left-0 bg-white text-black rounded shadow-md w-64 p-4">
                   <p className="text-sm font-bold">新しい通知:</p>
                   <ul className="mt-2 space-y-1 text-sm">
+                    {/* 通知項目 */}
                     <li>
                       <a
                         href="/notification/1"
@@ -69,21 +92,25 @@ export default function Header() {
                 </div>
               )}
             </li>
+
             {/* ユーザーアカウントアイコン */}
             <li className="relative" ref={userMenuRef}>
               <button
                 onClick={toggleUserMenu}
                 className="relative w-10 h-10 rounded-full bg-gray-300 flex justify-center items-center overflow-hidden"
               >
+                {/* 仮のユーザーアバター画像 */}
                 <img
                   src="https://via.placeholder.com/150"
                   alt="User Avatar"
                   className="w-full h-full object-cover"
                 />
               </button>
+              {/* ユーザーメニュー */}
               {showUserMenu && (
                 <div className="absolute top-12 right-0 bg-white text-black rounded shadow-md w-48 p-4">
                   <ul className="space-y-2 text-sm">
+                    {/* メニュー項目 */}
                     <li>
                       <a href="/" className="text-blue-600 hover:underline">
                         ホーム

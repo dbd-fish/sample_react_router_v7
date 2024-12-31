@@ -8,18 +8,24 @@ import { RemixBrowser } from '@remix-run/react';
 import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 
-// モックAPI用の設定
-if (process.env.NODE_ENV === 'development') {
-  import('./mocks/browser').then(({ worker }) => {
-    worker.start();
+// NOTE: mswのモックAPIの設定するとき、
+// worker.start()が非同期で実行されて、画面起動時にモックAPIが読み込まれないため、
+// async functionでラップして、await worker.start()を実行する
+async function main() {
+  // モックAPI用の設定
+  if (process.env.NODE_ENV === 'development') {
+    const { worker } = await import('./mocks/browser');
+    await worker.start();
+  }
+
+  startTransition(() => {
+    hydrateRoot(
+      document,
+      <StrictMode>
+        <RemixBrowser />
+      </StrictMode>,
+    );
   });
 }
 
-startTransition(() => {
-  hydrateRoot(
-    document,
-    <StrictMode>
-      <RemixBrowser />
-    </StrictMode>,
-  );
-});
+main();
