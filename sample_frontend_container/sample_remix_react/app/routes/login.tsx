@@ -1,41 +1,43 @@
-import React, { useState } from 'react';
-import LoginForm from '../components/forms/LoginForm'; // ログインフォームコンポーネントのインポート
-import ErrorMessage from '../components/ErrorMessage'; // エラーメッセージコンポーネントのインポート
+import { ActionFunction, json, redirect } from '@remix-run/node';
+import { useActionData } from '@remix-run/react';
+import LoginForm from '../components/forms/LoginForm';
+import { fetchLoginData } from '../utils/api/fetchLoginData';
 
 /**
- * Login コンポーネント
- * - ユーザーがログインするための画面を提供
- * - ログインフォームを表示し、エラーメッセージを管理
- * - ログイン失敗時にエラーメッセージを一時的に表示
+ * ログインページのAction関数
+ * - ユーザーがフォーム送信した内容を受け取り、認証APIを呼び出す
  */
-export default function Login() {
-  // エラーメッセージを管理する状態
-  const [error, setError] = useState<string | null>(null);
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
 
-  /**
-   * エラーメッセージを非表示にするコールバック関数
-   * - ErrorMessage コンポーネントから呼び出される
-   */
-  const handleDismiss = () => {
-    setError(null); // エラー状態をリセット
-  };
+  try {
+    await fetchLoginData(email, password);
+    return redirect('/mypage'); // ログイン成功時にマイページへリダイレクト
+  } catch (error: any) {
+    return json(
+      { error: error.message || 'ログインに失敗しました' },
+      { status: 400 },
+    );
+  }
+};
+
+export default function LoginPage() {
+  const actionData = useActionData<{ error?: string }>();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* メインのログイン画面コンテナ */}
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        {/* ログイン画面のタイトル */}
-        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
-          サンプルアプリケーション
-        </h1>
 
-        {/* エラーメッセージの表示 */}
-        {/* errorが存在する場合に ErrorMessage コンポーネントを表示 */}
-        {error && <ErrorMessage message={error} onDismiss={handleDismiss} />}
-
-        {/* ログインフォームコンポーネント */}
-        {/* setError をプロパティとして渡し、フォームでエラーが発生した際にメッセージを設定 */}
-        <LoginForm setError={setError} />
+        <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">ログイン</h1>
+      {actionData?.error && (
+        <div className="mb-4 text-sm text-red-500 border border-red-400 bg-red-100 px-4 py-2 rounded">
+          {actionData.error}
+        </div>
+      )}
+        {/* LoginFormコンポーネントを利用 */}
+        <LoginForm />
       </div>
     </div>
   );
