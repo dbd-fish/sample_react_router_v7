@@ -13,10 +13,10 @@ import { hydrateRoot } from 'react-dom/client';
 // async functionでラップして、await worker.start()を実行する
 async function main() {
   // モックAPI用の設定
-  if (process.env.NODE_ENV === 'development') {
-    const { worker } = await import('./mocks/browser');
-    await worker.start();
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   const { worker } = await import('./mocks/browser');
+  //   await worker.start();
+  // }
 
   startTransition(() => {
     hydrateRoot(
