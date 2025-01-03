@@ -1,9 +1,12 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import SearchForm from '../forms/SearchForm'; // 検索フォームのコンポーネントをインポート
 import SiteTitle from '../SiteTitle'; // サイトタイトル用のコンポーネントをインポート
 import useClickOutside from '../../hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
 import { useUser } from '../../context/UserContext'; // ユーザー情報を管理するコンテキストから情報を取得
-import { useLogout } from '../../hooks/useLogout'; // ログアウト処理をカスタムフックからインポート
+// import { useLogout } from '../../hooks/useLogout'; // ログアウト処理をカスタムフックからインポート
+import { useSubmit } from '@remix-run/react';
+// import { fetchLogoutData } from '../../utils/api/fetchLogoutData';
+// import { useAuth } from '../../hooks/useAuth';
 
 /**
  * ヘッダーコンポーネント
@@ -12,8 +15,24 @@ import { useLogout } from '../../hooks/useLogout'; // ログアウト処理を�
  */
 export default function Header() {
   // コンテキストからユーザー情報を取得
-  const { user } = useUser();
-  const logout = useLogout(); // カスタムフックからログアウト処理を取得
+  const { user, setUser } = useUser();
+
+  const submit = useSubmit();
+  // NOTE: このあたりの処理とAction関数の処理を確認する
+  const handleLogout = useCallback(async () => {
+    try {
+      // フォームデータを作成
+      const formData = new FormData();
+      formData.append('_action', 'logout');
+
+      // フォームを送信
+      submit(formData, { method: 'post' });
+      // ここでコンテキストを更新する
+      setUser(null);
+    } catch (error) {
+      console.error('ログアウトに失敗しました:', error);
+    }
+  }, [submit, setUser]);
 
   // 通知メニューとユーザーメニューの表示状態を管理
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -64,17 +83,26 @@ export default function Header() {
                   <p className="text-sm font-bold">新しい通知:</p>
                   <ul className="mt-2 space-y-1 text-sm">
                     <li>
-                      <a href="/notification/1" className="text-blue-600 hover:underline">
+                      <a
+                        href="/notification/1"
+                        className="text-blue-600 hover:underline"
+                      >
                         通知1
                       </a>
                     </li>
                     <li>
-                      <a href="/notification/2" className="text-blue-600 hover:underline">
+                      <a
+                        href="/notification/2"
+                        className="text-blue-600 hover:underline"
+                      >
                         通知2
                       </a>
                     </li>
                     <li>
-                      <a href="/notification/3" className="text-blue-600 hover:underline">
+                      <a
+                        href="/notification/3"
+                        className="text-blue-600 hover:underline"
+                      >
                         通知3
                       </a>
                     </li>
@@ -105,14 +133,17 @@ export default function Header() {
                       </a>
                     </li>
                     <li>
-                      <a href="/settings" className="text-blue-600 hover:underline">
+                      <a
+                        href="/settings"
+                        className="text-blue-600 hover:underline"
+                      >
                         設定
                       </a>
                     </li>
                     <li>
                       {/* ログアウトボタン */}
                       <button
-                        onClick={logout} // カスタムフックから取得したログアウト処理を実行
+                        onClick={handleLogout} // カスタムフックから取得したログアウト処理を実行
                         className="text-red-600 hover:underline w-full text-left"
                       >
                         ログアウト

@@ -1,5 +1,4 @@
 // NOTE: バックエンド連携するときに見直す必要あり
-import { useState, useEffect } from 'react';
 import LoggedInHeader from './header/LoggedInHeade';
 import LoggedOutHeader from './header/LoggedOutHeader';
 import { useUser } from '../context/UserContext'; // ユーザー情報を管理するコンテキストから情報を取得
@@ -14,6 +13,7 @@ const Header = () => {
     return <LoggedInHeader />;
   } else {
     return <LoggedOutHeader />;
-  }};
+  }
+};
 
 export default Header;

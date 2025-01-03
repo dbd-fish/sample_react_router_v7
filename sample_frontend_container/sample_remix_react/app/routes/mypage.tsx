@@ -1,14 +1,15 @@
 // sample_frontend_container/sample_remix_react/app/routes/mypage.tsx
 
-import { LoaderFunction, json } from '@remix-run/node';
-import { useLoaderData, useNavigate } from '@remix-run/react';
+import { LoaderFunction, ActionFunction, redirect } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { useEffect } from 'react';
 import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
 import { fetchUserData } from '../utils/api/fetchUserData';
-import { useAuth } from '../hooks/useAuth';
+// import { useAuth } from '../hooks/useAuth';
+import { fetchLogoutData } from '../utils/api/fetchLogoutData';
 
 /**
  * ローダー関数:
@@ -28,19 +29,33 @@ export const loader: LoaderFunction = async () => {
   }
 };
 
+// NOTE: ログアウトが必要な画面ではこれと似たAction関数を実装する必要あり
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const actionType = formData.get('_action');
+  if (actionType === 'logout') {
+    // ログアウトAPIを呼び出し
+    // NOTE: アクション内でカスタムフックをよびだせない。
+    await fetchLogoutData();
+    return redirect('/login');
+  }
+  console.log('actionType', actionType);
+  return null;
+};
+
 /**
  * マイページコンポーネント:
  * - ユーザー情報を表示するページ
  */
 export default function MyPage() {
   const loaderData = useLoaderData<{ username: string; email: string }>();
-  const { user, updateUser } = useAuth();
+  const { user, setUser } = useUser();
 
   useEffect(() => {
     if (loaderData) {
-      updateUser(loaderData); // ユーザー情報を更新
+      setUser(loaderData); // ユーザー情報を更新
     }
-  }, [loaderData, updateUser]);
+  }, [loaderData, setUser]);
 
   return (
     <div className="min-h-screen flex flex-col">

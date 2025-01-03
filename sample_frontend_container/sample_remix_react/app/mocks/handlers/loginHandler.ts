@@ -16,9 +16,12 @@ export const loginHandler = http.post(
   'http://localhost:5173/api/login',
   async ({ request }) => {
     try {
-      // リクエストのJSONボディをパースし、LoginRequestBody型として扱う
-      const { email, password } = (await request.json()) as LoginRequestBody;
+      // NOTE: リクエストのクローンを作成して、非同期でリクエストボディを取得
+      const clonedRequest = request.clone();
+      const rawBody = await clonedRequest.text(); // JSON文字列として取得
+      const body = JSON.parse(rawBody) as LoginRequestBody;
 
+      const { email, password } = body;
       // 受け取ったメールアドレスとパスワードをコンソールに出力（デバッグ目的）
       console.log('Received email:', email);
       console.log('Received password:', password);
