@@ -12,6 +12,7 @@ import { hydrateRoot } from 'react-dom/client';
 // worker.start()が非同期で実行されて、画面起動時にモックAPIが読み込まれないため、
 // async functionでラップして、await worker.start()を実行する
 async function main() {
+  // NOTE: RemixではLoaderやActionを用いてAPI通信を行うため、フロント側でのAPI通信は不要なはずなのでコメント化
   // モックAPI用の設定
   // if (process.env.NODE_ENV === 'development') {
   //   const { worker } = await import('./mocks/browser');
