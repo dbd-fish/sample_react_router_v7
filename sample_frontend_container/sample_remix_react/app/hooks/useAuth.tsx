@@ -1,6 +1,4 @@
-import { LoaderFunction } from '@remix-run/node';
-import { useLoaderData, useNavigate } from '@remix-run/react';
-import { useEffect } from 'react';
+
 import { useUser } from '../context/UserContext';
 
 /**
