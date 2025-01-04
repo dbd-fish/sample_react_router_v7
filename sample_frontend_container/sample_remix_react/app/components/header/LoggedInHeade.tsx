@@ -1,30 +1,70 @@
-import { useState, useRef } from 'react';
-import SearchForm from '../forms/SearchForm';
-import SiteTitle from '../SiteTitle';
-import useClickOutside from '../../hooks/useClickOutside';
+import { useState, useRef, useCallback } from 'react';
+import SearchForm from '../forms/SearchForm'; // 検索フォームのコンポーネントをインポート
+import SiteTitle from '../SiteTitle'; // サイトタイトル用のコンポーネントをインポート
+import useClickOutside from '../../hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
+// import { useLogout } from '../../hooks/useLogout'; // ログアウト処理をカスタムフックからインポート
+import { useLoaderData, useSubmit } from '@remix-run/react';
+// import { fetchLogoutData } from '../../utils/api/fetchLogoutData';
+// import { useAuth } from '../../hooks/useAuth';
 
+/**
+ * ヘッダーコンポーネント
+ * - サイト全体のヘッダーとして機能
+ * - ユーザー情報、通知、検索フォームを含む
+ */
 export default function Header() {
+  // コンテキストからユーザー情報を取得
+  const user = useLoaderData<{ username: string; email: string }>();
+
+  console.log('login header user', user);
+  const submit = useSubmit();
+  // NOTE: このあたりの処理とAction関数の処理を確認する
+  const handleLogout = useCallback(async () => {
+    try {
+      // フォームデータを作成
+      const formData = new FormData();
+      formData.append('_action', 'logout');
+
+      // フォームを送信
+      submit(formData, { method: 'post' });
+      // ここでコンテキストを更新する
+    } catch (error) {
+      console.error('ログアウトに失敗しました:', error);
+    }
+  }, [submit]);
+
+  // 通知メニューとユーザーメニューの表示状態を管理
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
 
+  // メニューのDOM要素を参照するためのRef
   const userMenuRef = useRef<HTMLLIElement>(null);
   const notificationRef = useRef<HTMLLIElement>(null);
 
   // カスタムフックを使用して外部クリックを検知
+  // ユーザーメニューが開いているときに外部クリックで閉じる
   useClickOutside(userMenuRef, () => setShowUserMenu(false));
+  // 通知メニューが開いているときに外部クリックで閉じる
   useClickOutside(notificationRef, () => setShowNotification(false));
 
+  // ユーザーメニューの開閉を切り替える
   const toggleUserMenu = () => setShowUserMenu(!showUserMenu);
+
+  // 通知メニューの開閉を切り替える
   const toggleNotification = () => setShowNotification(!showNotification);
 
   return (
     <header className="bg-blue-600 text-white py-4 shadow-md">
       <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-        {/* サンプルサイト (SiteTitle コンポーネント) */}
+        {/* サイトタイトル */}
         <SiteTitle />
+        {/* ユーザー情報を表示 */}
+        <span>こんにちは、{user?.username}さん</span>
+
         <nav className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-          {/* 分割したSearchFormコンポーネントを使用 */}
+          {/* 検索フォーム */}
           <SearchForm />
+
           <ul className="flex flex-row items-center space-x-4">
             {/* 通知アイコン */}
             <li className="relative" ref={notificationRef}>
@@ -69,12 +109,14 @@ export default function Header() {
                 </div>
               )}
             </li>
+
             {/* ユーザーアカウントアイコン */}
             <li className="relative" ref={userMenuRef}>
               <button
                 onClick={toggleUserMenu}
                 className="relative w-10 h-10 rounded-full bg-gray-300 flex justify-center items-center overflow-hidden"
               >
+                {/* 仮のユーザーアバター画像 */}
                 <img
                   src="https://via.placeholder.com/150"
                   alt="User Avatar"
@@ -96,6 +138,15 @@ export default function Header() {
                       >
                         設定
                       </a>
+                    </li>
+                    <li>
+                      {/* ログアウトボタン */}
+                      <button
+                        onClick={handleLogout} // カスタムフックから取得したログアウト処理を実行
+                        className="text-red-600 hover:underline w-full text-left"
+                      >
+                        ログアウト
+                      </button>
                     </li>
                   </ul>
                 </div>

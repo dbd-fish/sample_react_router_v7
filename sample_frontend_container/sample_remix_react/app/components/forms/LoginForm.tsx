@@ -1,42 +1,13 @@
-import React, { useState } from 'react';
+import { Form } from '@remix-run/react';
 
+/**
+ * LoginFormコンポーネント
+ * - ユーザーがメールアドレスとパスワードを入力して送信するフォーム
+ */
 export default function LoginForm() {
-  const [email, setEmail] = useState('');
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-
-    const loginData = {
-      email: email,
-      password: password,
-    };
-
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginData),
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        // ログイン成功時にプログラム的にリダイレクトを実行
-        window.location.href = '/mypage';
-      } else {
-        console.error('ログイン失敗:', response.statusText);
-      }
-    } catch (error) {
-      console.error('エラーが発生しました:', error);
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <Form method="post" className="space-y-6">
+      {/* メールアドレス入力フィールド */}
       <div>
         <label
           htmlFor="email"
@@ -48,13 +19,13 @@ export default function LoginForm() {
           type="email"
           id="email"
           name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           placeholder="example@example.com"
           required
         />
       </div>
+
+      {/* パスワード入力フィールド */}
       <div>
         <label
           htmlFor="password"
@@ -71,28 +42,8 @@ export default function LoginForm() {
           required
         />
       </div>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="remember"
-            name="remember"
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label
-            htmlFor="remember"
-            className="ml-2 block text-sm text-gray-800"
-          >
-            ログイン状態を保持
-          </label>
-        </div>
-        <a
-          href="/forgot-password"
-          className="text-sm text-blue-600 hover:underline"
-        >
-          パスワードをお忘れですか？
-        </a>
-      </div>
+
+      {/* ログインボタン */}
       <div>
         <button
           type="submit"
@@ -101,6 +52,6 @@ export default function LoginForm() {
           ログイン
         </button>
       </div>
-    </form>
+    </Form>
   );
 }

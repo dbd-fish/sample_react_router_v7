@@ -10,8 +10,13 @@ import { PassThrough } from 'node:stream';
 import type { EntryContext } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 import { renderToPipeableStream } from 'react-dom/server';
+import { server } from './mocks/server';
 
 const ABORT_DELAY = 5_000;
+
+if (process.env.NODE_ENV === 'development') {
+  server.listen();
+}
 
 export default function handleRequest(
   request: Request,
