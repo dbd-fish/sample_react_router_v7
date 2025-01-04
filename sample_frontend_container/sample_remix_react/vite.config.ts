@@ -25,5 +25,11 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
+    // NOTE:HTTPSサーバーを起動するための設定
+    proxy: {},
+    https: {
+      key: './certs/key.pem',
+      cert: './certs/cert.pem',
+    },
   },
 });
