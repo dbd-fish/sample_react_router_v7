@@ -19,10 +19,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onDismiss }) => {
   return (
     <div className="mb-4 text-red-500 text-center bg-red-100 p-2 rounded">
       {message}
-      <button
-        onClick={onDismiss}
-        className="ml-4 text-blue-500 underline"
-      >
+      <button onClick={onDismiss} className="ml-4 text-blue-500 underline">
         閉じる
       </button>
     </div>

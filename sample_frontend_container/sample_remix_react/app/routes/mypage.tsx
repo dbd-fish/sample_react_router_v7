@@ -2,7 +2,6 @@
 
 import { LoaderFunction, ActionFunction, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
