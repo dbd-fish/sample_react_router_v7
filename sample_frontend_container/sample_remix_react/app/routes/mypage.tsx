@@ -3,7 +3,6 @@
 import { LoaderFunction, ActionFunction, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { useEffect } from 'react';
-import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
@@ -49,13 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
  */
 export default function MyPage() {
   const loaderData = useLoaderData<{ username: string; email: string }>();
-  const { user, setUser } = useUser();
-
-  useEffect(() => {
-    if (loaderData) {
-      setUser(loaderData); // ユーザー情報を更新
-    }
-  }, [loaderData, setUser]);
+  console.log('MyPage loaderData', loaderData);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -68,9 +61,9 @@ export default function MyPage() {
             <div className="w-full md:w-2/3 bg-gray-50 rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-semibold text-gray-700 mb-4">概要</h2>
               <p className="text-gray-600">
-                名前: {user?.username}
+                名前: {loaderData.username}
                 <br />
-                メール: {user?.email}
+                メール: {loaderData.email}
                 <br />
                 あなたのアカウント情報や、活動の概要をここに表示します。好きな項目をクリックして更新したり、詳細を確認してください。
               </p>

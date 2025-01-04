@@ -2,9 +2,8 @@ import { useState, useRef, useCallback } from 'react';
 import SearchForm from '../forms/SearchForm'; // 検索フォームのコンポーネントをインポート
 import SiteTitle from '../SiteTitle'; // サイトタイトル用のコンポーネントをインポート
 import useClickOutside from '../../hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
-import { useUser } from '../../context/UserContext'; // ユーザー情報を管理するコンテキストから情報を取得
 // import { useLogout } from '../../hooks/useLogout'; // ログアウト処理をカスタムフックからインポート
-import { useSubmit } from '@remix-run/react';
+import { useLoaderData, useSubmit } from '@remix-run/react';
 // import { fetchLogoutData } from '../../utils/api/fetchLogoutData';
 // import { useAuth } from '../../hooks/useAuth';
 
@@ -15,8 +14,9 @@ import { useSubmit } from '@remix-run/react';
  */
 export default function Header() {
   // コンテキストからユーザー情報を取得
-  const { user, setUser } = useUser();
+  const user = useLoaderData<{ username: string; email: string }>();
 
+  console.log('login header user', user);
   const submit = useSubmit();
   // NOTE: このあたりの処理とAction関数の処理を確認する
   const handleLogout = useCallback(async () => {
@@ -28,11 +28,10 @@ export default function Header() {
       // フォームを送信
       submit(formData, { method: 'post' });
       // ここでコンテキストを更新する
-      setUser(null);
     } catch (error) {
       console.error('ログアウトに失敗しました:', error);
     }
-  }, [submit, setUser]);
+  }, [submit]);
 
   // 通知メニューとユーザーメニューの表示状態を管理
   const [showUserMenu, setShowUserMenu] = useState(false);

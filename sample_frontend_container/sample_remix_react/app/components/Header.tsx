@@ -1,12 +1,13 @@
 // NOTE: バックエンド連携するときに見直す必要あり
 import LoggedInHeader from './header/LoggedInHeade';
 import LoggedOutHeader from './header/LoggedOutHeader';
-import { useUser } from '../context/UserContext'; // ユーザー情報を管理するコンテキストから情報を取得
+import { useLoaderData } from '@remix-run/react';
 
-const Header = () => {
+export default function Header() {
   // コンテキストからユーザー情報を取得
-  const { user } = useUser();
-  // const  user  = null;
+  const user = useLoaderData<{ username: string; email: string }>();
+
+  console.log('header user', user);
 
   // 認証状況に応じて表示を切り替える
   if (user) {
@@ -14,6 +15,4 @@ const Header = () => {
   } else {
     return <LoggedOutHeader />;
   }
-};
-
-export default Header;
+}
