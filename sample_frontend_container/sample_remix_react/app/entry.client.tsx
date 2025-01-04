@@ -19,6 +19,7 @@ async function main() {
   //   await worker.start();
   // }
 
+  // NOTE: ReactのStrictModeを使用するとコンソールログが2回出力されるかも
   startTransition(() => {
     hydrateRoot(
       document,
