@@ -6,14 +6,22 @@
  * - 成功時: ユーザー情報オブジェクトを返す
  * - 失敗時: エラーメッセージをスロー
  */
-export const fetchUserData = async () => {
+export const fetchUserData = async (request) => {
   console.log('fetchUserData: start'); // 関数開始時のログ
 
-  const apiUrl = process.env.API_URL || 'http://localhost:5173'; // 環境変数からURLを取得
+  const apiUrl = 'http://localhost:5173'; // 環境変数からURLを取得
   console.log('fetchUserData: apiUrl', apiUrl); // API URLのログ
+
+  const cookieHeader = request.headers.get('Cookie');
+  console.log('fetchUserData: Cookie header:', cookieHeader);
+
   const response = await fetch(`${apiUrl}/api/get/me`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // NOTE: credentials: 'include'だけではなく下記のようにクッキーを明示的に渡さないとCookieが送信されない
+      Cookie: cookieHeader || '',
+    },
     credentials: 'include', // Cookieを送信
   });
 

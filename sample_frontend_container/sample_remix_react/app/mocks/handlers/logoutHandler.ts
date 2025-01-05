@@ -6,7 +6,8 @@ export const logoutHandler = http.post(
   'http://localhost:5173/api/logout',
   async () => {
     try {
-      // TODO: HTTP-only-Cookie内のJWTを削除する処理を実装
+      // NOTE: HTTP-only-Cookieに空のauthTokenを設定
+      const setCookieHeader = `authToken=; HttpOnly; Secure; SameSite=Lax; Path=/`;
 
       // 成功レスポンスを返す
       return new HttpResponse(
@@ -17,6 +18,9 @@ export const logoutHandler = http.post(
           status: 200,
           headers: {
             'Content-Type': 'application/json', // レスポンスの内容がJSONであることを示す
+            'Set-Cookie': setCookieHeader, // クライアントにJWTを含むクッキーを設定
+            'Access-Control-Allow-Origin': 'http://localhost:5173', // クライアントのオリジンを許可
+            'Access-Control-Allow-Credentials': 'true', // クッキーを含むリクエストを許可
           },
         },
       );

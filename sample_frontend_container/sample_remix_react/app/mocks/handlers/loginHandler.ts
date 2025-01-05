@@ -44,6 +44,8 @@ export const loginHandler = http.post(
             headers: {
               'Content-Type': 'application/json', // レスポンスの内容がJSONであることを示す
               'Set-Cookie': setCookieHeader, // クライアントにJWTを含むクッキーを設定
+              'Access-Control-Allow-Origin': 'http://localhost:5173', // クライアントのオリジンを許可
+              'Access-Control-Allow-Credentials': 'true', // クッキーを含むリクエストを許可
             },
           },
         );

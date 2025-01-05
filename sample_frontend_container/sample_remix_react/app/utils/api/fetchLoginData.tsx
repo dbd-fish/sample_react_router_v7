@@ -23,8 +23,12 @@ export const fetchLoginData = async (email: string, password: string) => {
   });
 
   if (response.ok) {
+    // レスポンスヘッダーからSet-Cookieヘッダーを取得
+    const setCookieHeader = response.headers.get('set-cookie');
+    console.log('fetchLoginData: Set-Cookie header:', setCookieHeader);
+
     console.log('fetchLoginData: success'); // 成功時のログ
-    return {}; // 必要に応じてデータを返す
+    return response; // 必要に応じてデータを返す
   } else {
     const errorData = await response.json();
     console.error('fetchLoginData: error', errorData); // エラー時のログ

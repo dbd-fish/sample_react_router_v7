@@ -1,29 +1,55 @@
-import { ActionFunction, redirect } from '@remix-run/node';
+import { ActionFunction, redirect, json, createCookie } from '@remix-run/node';
 import { useActionData } from '@remix-run/react';
 import LoginForm from '../components/forms/LoginForm';
 import { fetchLoginData } from '../utils/api/fetchLoginData';
 
-/**
- * ログインページのAction関数
- * - ユーザーがフォーム送信した内容を受け取り、認証APIを呼び出す
- */
+// createCookie APIを利用して新しいクッキーを作成
+const authCookie = createCookie('authToken', {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'lax',
+  path: '/',
+  maxAge: 60 * 60 * 24, // 1日
+});
+
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
   try {
-    await fetchLoginData(email, password);
-    return redirect('/mypage'); // ログイン成功時にマイページへリダイレクト
-  } catch (error) {
-    // JSONレスポンスを作成せず、直接Responseを返す
-    return new Response(
-      JSON.stringify({ error: error || 'ログインに失敗しました' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
+    console.log('Action: Incoming cookies:', request.headers.get('Cookie'));
+
+    // fetchLoginDataを呼び出して認証トークンを取得
+    const response = await fetchLoginData(email, password);
+    const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
+    console.log('Action: Received AuthToken:', authToken);
+
+    // クライアントから送信された既存のクッキーを取得
+    const existingCookiesHeader = request.headers.get('Cookie');
+    const existingCookies = existingCookiesHeader
+      ? await authCookie.parse(existingCookiesHeader)
+      : {};
+    console.log('Action: Existing cookies:', existingCookies);
+
+    // クッキーに新しい情報を追加
+    const updatedCookies = {
+      ...existingCookies,
+      authToken, // 新しい認証トークンを追加
+    };
+    console.log('Action: Updated cookies:', updatedCookies);
+
+    // シリアライズしてレスポンスに設定
+    const setCookieHeader = await authCookie.serialize(updatedCookies);
+
+    return redirect('/mypage', {
+      headers: {
+        'Set-Cookie': setCookieHeader,
       },
-    );
+    });
+  } catch (error) {
+    console.error('Action: Error occurred:', error);
+    return json({ error: 'ログインに失敗しました' }, { status: 400 });
   }
 };
 

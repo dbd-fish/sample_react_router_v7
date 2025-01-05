@@ -15,15 +15,40 @@ import { fetchLogoutData } from '../utils/api/fetchLogoutData';
  * - 成功時: ユーザー情報を返す
  * - 失敗時: 401エラーをスロー
  */
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
   try {
-    const userData = await fetchUserData();
+    // HTTP-only クッキーの取得
+    const cookieHeader = request.headers.get('Cookie');
+    console.log('Loader: Incoming cookies:', cookieHeader);
+
+    // authToken と csrfToken をクッキーから抽出
+    const authTokenMatch = cookieHeader?.match(/authToken=([^;]+)/);
+    const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
+
+    const authToken = authTokenMatch ? authTokenMatch[1] : null;
+    const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
+
+    console.log('Loader: Extracted authToken:', authToken);
+    console.log('Loader: Extracted csrfToken:', csrfToken);
+
+    // authToken が存在しない場合はログインページへリダイレクト
+    if (!authToken) {
+      console.log('Loader: Missing authToken, redirecting to login.');
+      return redirect('/login');
+    }
+
+    // 外部API呼び出し
+    console.log('Loader: Fetching user data with authToken...');
+    const userData = await fetchUserData(request);
+    console.log('Loader: Retrieved user data:', userData);
+
+    // 正常なレスポンスを返す
     return new Response(JSON.stringify(userData), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.log('loader error', error);
-    throw new Response('Unauthorized', { status: 401 });
+    console.error('Loader: Error occurred:', error);
+    return new Response('Unauthorized', { status: 401 });
   }
 };
 
@@ -31,14 +56,52 @@ export const loader: LoaderFunction = async () => {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const actionType = formData.get('_action');
+
+  console.log('Action: Received actionType:', actionType);
+
   if (actionType === 'logout') {
-    // ログアウトAPIを呼び出し
-    // NOTE: アクション内でカスタムフックをよびだせない。
-    await fetchLogoutData();
-    return redirect('/login');
+    try {
+      console.log('Action: Calling fetchLogoutData...');
+      // ログアウトAPIを呼び出し
+      await fetchLogoutData();
+
+      console.log('Action: Removing authToken and csrfToken cookies...');
+      // クッキーを削除するレスポンスヘッダーを作成
+      const headers = new Headers();
+      headers.append(
+        'Set-Cookie',
+        'authToken=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
+      );
+      // headers.append(
+      //   'Set-Cookie',
+      //   'csrftoken=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
+      // );
+
+      console.log('Action: Redirecting to login page...');
+      return new Response(null, {
+        status: 302,
+        headers: {
+          ...headers,
+          Location: '/login',
+        },
+      });
+    } catch (error) {
+      console.error('Action: Error during logout:', error);
+      return new Response(
+        JSON.stringify({ error: 'ログアウトに失敗しました' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
   }
-  console.log('actionType', actionType);
-  return null;
+
+  console.log('Action: No valid actionType provided.');
+  return new Response(JSON.stringify({ error: '無効なアクションタイプです' }), {
+    status: 400,
+    headers: { 'Content-Type': 'application/json' },
+  });
 };
 
 /**
