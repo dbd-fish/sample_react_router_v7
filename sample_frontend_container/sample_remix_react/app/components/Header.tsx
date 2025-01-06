@@ -4,7 +4,8 @@ import LoggedOutHeader from './header/LoggedOutHeader';
 import { useLoaderData } from '@remix-run/react';
 
 export default function Header() {
-  // コンテキストからユーザー情報を取得
+  // ローダー関数で取得したユーザー情報を取得
+  // TODO: Loader関数の戻り値が多様化した場合に問題あり
   const user = useLoaderData<{ username: string; email: string }>();
 
   console.log('header user', user);

@@ -10,32 +10,13 @@ export const action: ActionFunction = async ({ request }) => {
   const password = formData.get('password') as string;
 
   try {
-    // TODO: このあたりの処理をが怪しい。existingCookiesがNullだったり、updatedCookiesにAuthTokenしか入っていないから不要かも？
-    // 
-
     // fetchLoginDataを呼び出して認証トークンを取得
     const response = await fetchLoginData(email, password);
     const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
     console.log('Action: Received AuthToken:', authToken);
 
-    // クライアントから送信された既存のクッキーを取得
-    const existingCookiesHeader = request.headers.get('Cookie');
-    console.log('Action: Incoming cookies:', existingCookiesHeader);
-
-    const existingCookies = existingCookiesHeader
-      ? await authCookie.parse(existingCookiesHeader)
-      : {};
-    console.log('Action: Existing cookies:', existingCookies);
-
-    // クッキーに新しい情報を追加
-    const updatedCookies = {
-      ...existingCookies,
-      authToken, // 新しい認証トークンを追加
-    };
-    console.log('Action: Updated cookies:', updatedCookies);
-
     // シリアライズしてレスポンスに設定
-    const setCookieHeader = await authCookie.serialize(updatedCookies);
+    const setCookieHeader = await authCookie.serialize(authToken);
 
     return redirect('/mypage', {
       headers: {

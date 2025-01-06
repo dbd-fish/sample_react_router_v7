@@ -48,8 +48,10 @@ export const loader: LoaderFunction = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error('Loader: Error occurred:', error);
-    return new Response('Unauthorized', { status: 401 });
+    console.error('Loader Error:', error);
+    throw new Response('ユーザーデータの取得に失敗しました。', {
+      status: 400,
+    });
   }
 };
 
@@ -81,23 +83,17 @@ export const action: ActionFunction = async ({ request }) => {
           'Set-Cookie': setCookieHeader,
         },
       });
-
     } catch (error) {
       console.error('Action: Error during logout:', error);
-      return new Response(
-        JSON.stringify({ error: 'ログアウトに失敗しました' }),
-        {
-          status: 500,
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      throw new Response('サーバー上で不具合が発生しました', {
+        status: 400,
+      });
     }
   }
 
   console.log('Action: No valid actionType provided.');
-  return new Response(JSON.stringify({ error: '無効なアクションタイプです' }), {
+  throw new Response('サーバー上で不具合が発生しました', {
     status: 400,
-    headers: { 'Content-Type': 'application/json' },
   });
 };
 

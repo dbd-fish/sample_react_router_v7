@@ -6,7 +6,7 @@
  * - 成功時: ユーザー情報オブジェクトを返す
  * - 失敗時: エラーメッセージをスロー
  */
-export const fetchUserData = async (request) => {
+export const fetchUserData = async (request: Request) => {
   console.log('fetchUserData: start'); // 関数開始時のログ
 
   const apiUrl = 'http://localhost:5173'; // 環境変数からURLを取得
