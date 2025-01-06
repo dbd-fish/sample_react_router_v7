@@ -8,6 +8,7 @@ import ProfileCard from '../components/mypage/ProfileCard';
 import { fetchUserData } from '../utils/api/fetchUserData';
 // import { useAuth } from '../hooks/useAuth';
 import { fetchLogoutData } from '../utils/api/fetchLogoutData';
+import { authTokenCookie } from '../utils/cookies';
 
 /**
  * ローダー関数:
@@ -63,28 +64,24 @@ export const action: ActionFunction = async ({ request }) => {
     try {
       console.log('Action: Calling fetchLogoutData...');
       // ログアウトAPIを呼び出し
-      await fetchLogoutData();
+      const response = await fetchLogoutData();
+      // デバック用: レスポンスの内容をコンソールに出力
+      const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
+      console.log('Action: Received AuthToken:', authToken);
 
-      console.log('Action: Removing authToken and csrfToken cookies...');
-      // クッキーを削除するレスポンスヘッダーを作成
-      const headers = new Headers();
-      headers.append(
-        'Set-Cookie',
-        'authToken=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
-      );
-      // headers.append(
-      //   'Set-Cookie',
-      //   'csrftoken=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
-      // );
+      // デバック用: クライアントから送信された既存のクッキーを取得
+      const existingCookiesHeader = request.headers.get('Cookie');
+      console.log('Action: Incoming cookies:', existingCookiesHeader);
 
-      console.log('Action: Redirecting to login page...');
-      return new Response(null, {
-        status: 302,
+      // Cookieを破棄するためにmax-age=0のCookieを作成
+      const setCookieHeader = await authTokenCookie.serialize('', {});
+
+      return redirect('/login', {
         headers: {
-          ...headers,
-          Location: '/login',
+          'Set-Cookie': setCookieHeader,
         },
       });
+
     } catch (error) {
       console.error('Action: Error during logout:', error);
       return new Response(

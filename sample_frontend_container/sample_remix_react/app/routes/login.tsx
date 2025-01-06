@@ -1,16 +1,8 @@
-import { ActionFunction, redirect, json, createCookie } from '@remix-run/node';
+import { ActionFunction, redirect } from '@remix-run/node';
 import { useActionData } from '@remix-run/react';
 import LoginForm from '../components/forms/LoginForm';
 import { fetchLoginData } from '../utils/api/fetchLoginData';
-
-// createCookie APIを利用して新しいクッキーを作成
-const authCookie = createCookie('authToken', {
-  httpOnly: true,
-  secure: true,
-  sameSite: 'lax',
-  path: '/',
-  maxAge: 60 * 60 * 24, // 1日
-});
+import { authCookie } from '../utils/cookies';
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -18,7 +10,8 @@ export const action: ActionFunction = async ({ request }) => {
   const password = formData.get('password') as string;
 
   try {
-    console.log('Action: Incoming cookies:', request.headers.get('Cookie'));
+    // TODO: このあたりの処理をが怪しい。existingCookiesがNullだったり、updatedCookiesにAuthTokenしか入っていないから不要かも？
+    // 
 
     // fetchLoginDataを呼び出して認証トークンを取得
     const response = await fetchLoginData(email, password);
@@ -27,6 +20,8 @@ export const action: ActionFunction = async ({ request }) => {
 
     // クライアントから送信された既存のクッキーを取得
     const existingCookiesHeader = request.headers.get('Cookie');
+    console.log('Action: Incoming cookies:', existingCookiesHeader);
+
     const existingCookies = existingCookiesHeader
       ? await authCookie.parse(existingCookiesHeader)
       : {};
@@ -49,7 +44,10 @@ export const action: ActionFunction = async ({ request }) => {
     });
   } catch (error) {
     console.error('Action: Error occurred:', error);
-    return json({ error: 'ログインに失敗しました' }, { status: 400 });
+    return new Response(JSON.stringify({ error: 'ログインに失敗しました' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 };
 
