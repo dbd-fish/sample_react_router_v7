@@ -3,8 +3,7 @@ import {
   type LoaderFunction,
   type MetaFunction,
 } from '@remix-run/node';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+
 
 export const loader: LoaderFunction = async () => {
   return redirect('/home'); // 'home.tsx' にリダイレクト
