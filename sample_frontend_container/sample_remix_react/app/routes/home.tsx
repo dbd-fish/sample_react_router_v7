@@ -1,5 +1,61 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { LoaderFunction, redirect, ActionFunction } from '@remix-run/node';
+import { userDataLoader } from '../loaders/userDataLoader';
+import { AuthenticationError } from '../utils/errors/AuthenticationError';
+import { logoutAction } from '../actions/logoutAction';
+
+/**
+ * ローダー関数:
+ * - サーバーサイドで実行され、ユーザー情報を取得
+ * - 成功時: ユーザー情報を返す
+ * - 失敗時: 401エラーをスロー
+ */
+export const loader: LoaderFunction = async ({ request }) => {
+  try {
+    const userData = await userDataLoader(request, false);
+
+    // 正常なレスポンスを返す
+    return new Response(JSON.stringify(userData), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    if (error instanceof AuthenticationError) {
+      console.log('Loader: AuthenticationError:');
+      return redirect('/login');
+    }
+    console.error('Loader Error:', error);
+
+    throw new Response('ユーザーデータの取得に失敗しました。', {
+      status: 400,
+    });
+  }
+};
+
+// NOTE: ログアウトが必要な画面ではこれと似たAction関数を実装する必要あり
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const formData = await request.formData();
+    const actionType = formData.get('_action');
+
+    console.log('Action: Received actionType:', actionType);
+
+    if (actionType === 'logout') {
+      const respons = await logoutAction(request);
+      return respons;
+    }
+
+    console.log('Action: No valid actionType provided.');
+    throw new Response('サーバー上で不具合が発生しました', {
+      status: 400,
+    });
+  } catch (error) {
+    console.error('aaaaAction: Error occurred:', error);
+    throw new Response('サーバー上で予期しないエラーが発生しました', {
+      status: 400,
+    });
+  }
+};
 
 export default function Home() {
   return (

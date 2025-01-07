@@ -1,29 +1,34 @@
 import { ActionFunction, redirect } from '@remix-run/node';
 import { useActionData } from '@remix-run/react';
 import LoginForm from '../components/forms/LoginForm';
-import { fetchLoginData } from '../utils/api/fetchLoginData';
+import { fetchLoginData } from '../utils/apis/fetchLoginData';
+import { authCookie } from '../utils/cookies';
 
-/**
- * ログインページのAction関数
- * - ユーザーがフォーム送信した内容を受け取り、認証APIを呼び出す
- */
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
   try {
-    await fetchLoginData(email, password);
-    return redirect('/mypage'); // ログイン成功時にマイページへリダイレクト
-  } catch (error) {
-    // JSONレスポンスを作成せず、直接Responseを返す
-    return new Response(
-      JSON.stringify({ error: error || 'ログインに失敗しました' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
+    // fetchLoginDataを呼び出して認証トークンを取得
+    const response = await fetchLoginData(email, password);
+    const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
+    console.log('Action: Received AuthToken:', authToken);
+
+    // シリアライズしてレスポンスに設定
+    const setCookieHeader = await authCookie.serialize(authToken);
+
+    return redirect('/mypage', {
+      headers: {
+        'Set-Cookie': setCookieHeader,
       },
-    );
+    });
+  } catch (error) {
+    console.error('Action: Error occurred:', error);
+    return new Response(JSON.stringify({ error: 'ログインに失敗しました' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 };
 

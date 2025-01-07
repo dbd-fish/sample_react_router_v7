@@ -5,9 +5,10 @@ import { useLoaderData } from '@remix-run/react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
-import { fetchUserData } from '../utils/api/fetchUserData';
-// import { useAuth } from '../hooks/useAuth';
-import { fetchLogoutData } from '../utils/api/fetchLogoutData';
+import { userDataLoader } from '../loaders/userDataLoader';
+import { authTokenLoader } from '../loaders/authTokenLoader';
+import { AuthenticationError } from '../utils/errors/AuthenticationError';
+import { logoutAction } from '../actions/logoutAction';
 
 /**
  * ローダー関数:
@@ -15,30 +16,51 @@ import { fetchLogoutData } from '../utils/api/fetchLogoutData';
  * - 成功時: ユーザー情報を返す
  * - 失敗時: 401エラーをスロー
  */
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
   try {
-    const userData = await fetchUserData();
+    await authTokenLoader(request);
+    const userData = await userDataLoader(request);
+
+    // 正常なレスポンスを返す
     return new Response(JSON.stringify(userData), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.log('loader error', error);
-    throw new Response('Unauthorized', { status: 401 });
+    if (error instanceof AuthenticationError) {
+      console.log('Loader: AuthenticationError:');
+      return redirect('/login');
+    }
+    console.error('Loader Error:', error);
+
+    throw new Response('ユーザーデータの取得に失敗しました。', {
+      status: 400,
+    });
   }
 };
 
 // NOTE: ログアウトが必要な画面ではこれと似たAction関数を実装する必要あり
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const actionType = formData.get('_action');
-  if (actionType === 'logout') {
-    // ログアウトAPIを呼び出し
-    // NOTE: アクション内でカスタムフックをよびだせない。
-    await fetchLogoutData();
-    return redirect('/login');
+  try {
+    const formData = await request.formData();
+    const actionType = formData.get('_action');
+
+    console.log('Action: Received actionType:', actionType);
+
+    if (actionType === 'logout') {
+      const respons = await logoutAction(request);
+      return respons;
+    }
+
+    console.log('Action: No valid actionType provided.');
+    throw new Response('サーバー上で不具合が発生しました', {
+      status: 400,
+    });
+  } catch (error) {
+    console.error('aaaaAction: Error occurred:', error);
+    throw new Response('サーバー上で予期しないエラーが発生しました', {
+      status: 400,
+    });
   }
-  console.log('actionType', actionType);
-  return null;
 };
 
 /**

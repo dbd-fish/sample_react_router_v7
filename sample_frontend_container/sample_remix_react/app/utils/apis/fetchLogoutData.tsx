@@ -14,7 +14,7 @@ export const fetchLogoutData = async () => {
 
   if (response.ok) {
     console.log('fetchLogoutData: success'); // 成功時のログ
-    return {}; // 必要に応じてデータを返す
+    return response; // 必要に応じてデータを返す
   } else {
     const errorData = await response.json();
     console.error('fetchLogoutData: error', errorData); // エラー時のログ
