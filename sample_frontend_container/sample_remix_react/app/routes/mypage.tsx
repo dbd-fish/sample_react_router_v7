@@ -9,6 +9,8 @@ import { fetchUserData } from '../utils/api/fetchUserData';
 // import { useAuth } from '../hooks/useAuth';
 import { fetchLogoutData } from '../utils/api/fetchLogoutData';
 import { authTokenCookie } from '../utils/cookies';
+import { userDataLoader } from '../loader/userDataLoader';
+import { AuthenticationError } from '../loader/userDataLoader';
 
 /**
  * ローダー関数:
@@ -18,37 +20,43 @@ import { authTokenCookie } from '../utils/cookies';
  */
 export const loader: LoaderFunction = async ({ request }) => {
   try {
-    // HTTP-only クッキーの取得
-    const cookieHeader = request.headers.get('Cookie');
-    console.log('Loader: Incoming cookies:', cookieHeader);
+    const userData = await userDataLoader(request);
+    // // HTTP-only クッキーの取得
+    // const cookieHeader = request.headers.get('Cookie');
+    // console.log('Loader: Incoming cookies:', cookieHeader);
 
-    // authToken と csrfToken をクッキーから抽出
-    const authTokenMatch = cookieHeader?.match(/authToken=([^;]+)/);
-    const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
+    // // authToken と csrfToken をクッキーから抽出
+    // const authTokenMatch = cookieHeader?.match(/authToken=([^;]+)/);
+    // const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
 
-    const authToken = authTokenMatch ? authTokenMatch[1] : null;
-    const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
+    // const authToken = authTokenMatch ? authTokenMatch[1] : null;
+    // const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
 
-    console.log('Loader: Extracted authToken:', authToken);
-    console.log('Loader: Extracted csrfToken:', csrfToken);
+    // console.log('Loader: Extracted authToken:', authToken);
+    // console.log('Loader: Extracted csrfToken:', csrfToken);
 
-    // authToken が存在しない場合はログインページへリダイレクト
-    if (!authToken) {
-      console.log('Loader: Missing authToken, redirecting to login.');
-      return redirect('/login');
-    }
+    // // authToken が存在しない場合はログインページへリダイレクト
+    // if (!authToken) {
+    //   console.log('Loader: Missing authToken, redirecting to login.');
+    //   return redirect('/login');
+    // }
 
-    // 外部API呼び出し
-    console.log('Loader: Fetching user data with authToken...');
-    const userData = await fetchUserData(request);
-    console.log('Loader: Retrieved user data:', userData);
+    // // 外部API呼び出し
+    // console.log('Loader: Fetching user data with authToken...');
+    // const userData = await fetchUserData(request);
+    // console.log('Loader: Retrieved user data:', userData);
 
-    // 正常なレスポンスを返す
+    // // 正常なレスポンスを返す
     return new Response(JSON.stringify(userData), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
+    if (error instanceof AuthenticationError) {
+      console.error('Loader: AuthenticationError:', error.message);
+      return redirect('/login');
+    }
     console.error('Loader Error:', error);
+
     throw new Response('ユーザーデータの取得に失敗しました。', {
       status: 400,
     });
