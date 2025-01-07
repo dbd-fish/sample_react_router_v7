@@ -10,6 +10,7 @@ import { authTokenCookie } from '../utils/cookies';
 import { userDataLoader } from '../loaders/userDataLoader';
 import { authTokenLoader } from '../loaders/authTokenLoader';
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
+import { logoutAction } from '../actions/logoutAction';
 
 /**
  * ローダー関数:
@@ -47,32 +48,8 @@ export const action: ActionFunction = async ({ request }) => {
   console.log('Action: Received actionType:', actionType);
 
   if (actionType === 'logout') {
-    try {
-      console.log('Action: Calling fetchLogoutData...');
-      // ログアウトAPIを呼び出し
-      const response = await fetchLogoutData();
-      // デバック用: レスポンスの内容をコンソールに出力
-      const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
-      console.log('Action: Received AuthToken:', authToken);
-
-      // デバック用: クライアントから送信された既存のクッキーを取得
-      const existingCookiesHeader = request.headers.get('Cookie');
-      console.log('Action: Incoming cookies:', existingCookiesHeader);
-
-      // Cookieを破棄するためにmax-age=0のCookieを作成
-      const setCookieHeader = await authTokenCookie.serialize('', {});
-
-      return redirect('/login', {
-        headers: {
-          'Set-Cookie': setCookieHeader,
-        },
-      });
-    } catch (error) {
-      console.error('Action: Error during logout:', error);
-      throw new Response('サーバー上で不具合が発生しました', {
-        status: 400,
-      });
-    }
+    const respons = await logoutAction(request);
+    return respons;
   }
 
   console.log('Action: No valid actionType provided.');

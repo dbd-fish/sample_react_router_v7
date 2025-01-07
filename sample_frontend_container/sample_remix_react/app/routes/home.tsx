@@ -1,8 +1,9 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { LoaderFunction, redirect } from '@remix-run/node';
+import { LoaderFunction, redirect, ActionFunction } from '@remix-run/node';
 import { userDataLoader } from '../loaders/userDataLoader';
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
+import { logoutAction } from '../actions/logoutAction';
 
 /**
  * ローダー関数:
@@ -30,6 +31,25 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   }
 };
+
+// NOTE: ログアウトが必要な画面ではこれと似たAction関数を実装する必要あり
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const actionType = formData.get('_action');
+
+  console.log('Action: Received actionType:', actionType);
+
+  if (actionType === 'logout') {
+    const respons = await logoutAction(request);
+    return respons;
+  }
+
+  console.log('Action: No valid actionType provided.');
+  throw new Response('サーバー上で不具合が発生しました', {
+    status: 400,
+  });
+};
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
