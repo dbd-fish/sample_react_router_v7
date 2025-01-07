@@ -30,7 +30,7 @@ export const fetchUserData = async (request: Request) => {
     console.log('fetchUserData: success', data); // 成功時のログ
     return { username: data.username, email: data.email };
   } else {
-    console.error('fetchUserData: error', response.status); // エラー時のログ
-    throw new Error('Unauthorized');
+    console.log('fetchUserData: failed', response.status); // エラー時のログ
+    return null;
   }
 };

@@ -5,12 +5,11 @@ import { useLoaderData } from '@remix-run/react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
-import { fetchUserData } from '../utils/api/fetchUserData';
-// import { useAuth } from '../hooks/useAuth';
 import { fetchLogoutData } from '../utils/api/fetchLogoutData';
 import { authTokenCookie } from '../utils/cookies';
 import { userDataLoader } from '../loader/userDataLoader';
-import { AuthenticationError } from '../loader/userDataLoader';
+import { authTokenLoader } from '../loader/authTokenLoader';
+import { AuthenticationError } from '../utils/errors/AuthenticationError';
 
 /**
  * ローダー関数:
@@ -20,39 +19,16 @@ import { AuthenticationError } from '../loader/userDataLoader';
  */
 export const loader: LoaderFunction = async ({ request }) => {
   try {
+    await authTokenLoader(request);
     const userData = await userDataLoader(request);
-    // // HTTP-only クッキーの取得
-    // const cookieHeader = request.headers.get('Cookie');
-    // console.log('Loader: Incoming cookies:', cookieHeader);
 
-    // // authToken と csrfToken をクッキーから抽出
-    // const authTokenMatch = cookieHeader?.match(/authToken=([^;]+)/);
-    // const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
-
-    // const authToken = authTokenMatch ? authTokenMatch[1] : null;
-    // const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
-
-    // console.log('Loader: Extracted authToken:', authToken);
-    // console.log('Loader: Extracted csrfToken:', csrfToken);
-
-    // // authToken が存在しない場合はログインページへリダイレクト
-    // if (!authToken) {
-    //   console.log('Loader: Missing authToken, redirecting to login.');
-    //   return redirect('/login');
-    // }
-
-    // // 外部API呼び出し
-    // console.log('Loader: Fetching user data with authToken...');
-    // const userData = await fetchUserData(request);
-    // console.log('Loader: Retrieved user data:', userData);
-
-    // // 正常なレスポンスを返す
+    // 正常なレスポンスを返す
     return new Response(JSON.stringify(userData), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     if (error instanceof AuthenticationError) {
-      console.error('Loader: AuthenticationError:', error.message);
+      console.log('Loader: AuthenticationError:');
       return redirect('/login');
     }
     console.error('Loader Error:', error);
