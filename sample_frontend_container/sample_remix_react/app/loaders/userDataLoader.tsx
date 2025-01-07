@@ -1,5 +1,5 @@
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
-import { fetchUserData } from '../utils/api/fetchUserData';
+import { fetchUserData } from '../utils/apis/fetchUserData';
 /**
  * 外部APIから認証情報を取得します。
  *

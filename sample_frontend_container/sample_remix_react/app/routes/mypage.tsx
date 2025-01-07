@@ -5,10 +5,10 @@ import { useLoaderData } from '@remix-run/react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileCard from '../components/mypage/ProfileCard';
-import { fetchLogoutData } from '../utils/api/fetchLogoutData';
+import { fetchLogoutData } from '../utils/apis/fetchLogoutData';
 import { authTokenCookie } from '../utils/cookies';
-import { userDataLoader } from '../loader/userDataLoader';
-import { authTokenLoader } from '../loader/authTokenLoader';
+import { userDataLoader } from '../loaders/userDataLoader';
+import { authTokenLoader } from '../loaders/authTokenLoader';
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
 
 /**

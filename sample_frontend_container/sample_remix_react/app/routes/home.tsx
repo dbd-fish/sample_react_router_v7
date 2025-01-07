@@ -1,7 +1,7 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { LoaderFunction, redirect } from '@remix-run/node';
-import { userDataLoader } from '../loader/userDataLoader';
+import { userDataLoader } from '../loaders/userDataLoader';
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
 
 /**
