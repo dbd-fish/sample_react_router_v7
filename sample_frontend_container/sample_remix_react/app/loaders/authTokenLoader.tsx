@@ -26,6 +26,7 @@ export async function authTokenLoader(request: Request) {
   console.log('Loader: Extracted csrfToken:', csrfToken);
 
   // authToken が存在しない場合はログインページへリダイレクト
+  // NOTE: Actionへレスポンスとしてリダイレクトを返すことは可能だが、Loaderへリダイレクトを返すことができないため、エラーをスローする
   if (!authToken) {
     console.log('Loader: Missing authToken, redirecting to login.');
     throw new AuthenticationError('認証トークンが見つかりません。');
