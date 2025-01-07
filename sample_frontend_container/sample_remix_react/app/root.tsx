@@ -5,16 +5,18 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  useRouteError,
 } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
 
 import './tailwind.css';
-import { useRouteError } from '@remix-run/react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
+// NOTE:暫定的にここにエラー画面を記載
 export function ErrorBoundary() {
   const error = useRouteError();
+
   console.error(error);
 
   let errorMessage = '予期しないエラーが発生しました。';
@@ -23,9 +25,12 @@ export function ErrorBoundary() {
     errorMessage = error.data || 'サーバーエラーが発生しました。';
   }
   console.log('ErrorBoundary:', error);
-  
+
   return (
     <div className="min-h-screen flex flex-col">
+      {/* NOTE: Header内で認証情報をuseLoaderDataで確認するが、
+      ErrorBoundary経由ではLoaderからのデータがないため、
+      一律でLoggedOutHeaderが表示される */}
       <Header />
       <main className="flex-grow bg-gray-100 flex items-center justify-center">
         <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-8">

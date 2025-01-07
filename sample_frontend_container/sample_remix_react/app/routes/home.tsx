@@ -34,20 +34,27 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 // NOTE: ログアウトが必要な画面ではこれと似たAction関数を実装する必要あり
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const actionType = formData.get('_action');
+  try {
+    const formData = await request.formData();
+    const actionType = formData.get('_action');
 
-  console.log('Action: Received actionType:', actionType);
+    console.log('Action: Received actionType:', actionType);
 
-  if (actionType === 'logout') {
-    const respons = await logoutAction(request);
-    return respons;
+    if (actionType === 'logout') {
+      const respons = await logoutAction(request);
+      return respons;
+    }
+
+    console.log('Action: No valid actionType provided.');
+    throw new Response('サーバー上で不具合が発生しました', {
+      status: 400,
+    });
+  } catch (error) {
+    console.error('aaaaAction: Error occurred:', error);
+    throw new Response('サーバー上で予期しないエラーが発生しました', {
+      status: 400,
+    });
   }
-
-  console.log('Action: No valid actionType provided.');
-  throw new Response('サーバー上で不具合が発生しました', {
-    status: 400,
-  });
 };
 
 export default function Home() {
