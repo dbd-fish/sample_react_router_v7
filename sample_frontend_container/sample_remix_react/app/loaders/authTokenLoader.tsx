@@ -1,4 +1,5 @@
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
+// import logger from '../utils/logger';
 
 /**
  * リクエストヘッダーから認証トークンを取得して検証します。
@@ -11,26 +12,41 @@ import { AuthenticationError } from '../utils/errors/AuthenticationError';
  * @returns {Promise<void>} 成功した場合、特に値は返しません。
  */
 export async function authTokenLoader(request: Request) {
-  // HTTP-only クッキーの取得
-  const cookieHeader = request.headers.get('Cookie');
-  console.log('Loader: Incoming cookies:', cookieHeader);
+  // logger.info('[authTokenLoader] start');
+  try {
+    // HTTP-only クッキーの取得
+    const cookieHeader = request.headers.get('Cookie');
+    // logger.debug('[authTokenLoader] Incoming cookies', {
+    //   cookieHeader: cookieHeader,
+    // });
 
-  // authToken と csrfToken をクッキーから抽出
-  const authTokenMatch = cookieHeader?.match(/authToken=([^;]+)/);
-  const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
+    // authToken と csrfToken をクッキーから抽出
+    const authTokenMatch = cookieHeader?.match(/authToken=([^;]+)/);
+    // const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
 
-  const authToken = authTokenMatch ? authTokenMatch[1] : null;
-  const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
+    const authToken = authTokenMatch ? authTokenMatch[1] : null;
+    // const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
 
-  console.log('Loader: Extracted authToken:', authToken);
-  console.log('Loader: Extracted csrfToken:', csrfToken);
+    // logger.debug('[authTokenLoader] Extracted authToken', {
+    //   authToken: authToken,
+    // });
+    // logger.debug('[authTokenLoader] Extracted csrfToken', {
+    //   csrfToken: csrfToken,
+    // });
 
-  // authToken が存在しない場合はログインページへリダイレクト
-  // NOTE: Actionへレスポンスとしてリダイレクトを返すことは可能だが、Loaderへリダイレクトを返すことができないため、エラーをスローする
-  if (!authToken) {
-    console.log('Loader: Missing authToken, redirecting to login.');
-    throw new AuthenticationError('認証トークンが見つかりません。');
+    // authToken が存在しない場合はログインページへリダイレクト
+    if (!authToken) {
+      // logger.info('[authTokenLoader] Missing authToken, throwing error.');
+      throw new AuthenticationError('認証トークンが見つかりません。');
+    }
+
+    // logger.info('[authTokenLoader] completed successfully');
+  } catch (error) {
+    // logger.error('[authTokenLoader] Error occurred', {
+    //   error: error,
+    // });
+    throw error;
+  } finally {
+    // logger.info('[authTokenLoader] end');
   }
-
-  return;
 }

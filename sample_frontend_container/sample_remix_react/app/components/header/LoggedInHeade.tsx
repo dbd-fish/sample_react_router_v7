@@ -16,7 +16,6 @@ export default function Header() {
   // コンテキストからユーザー情報を取得
   const user = useLoaderData<{ username: string; email: string }>();
 
-  console.log('login header user', user);
   const submit = useSubmit();
   // NOTE: このあたりの処理とAction関数の処理を確認する
   const handleLogout = useCallback(async () => {

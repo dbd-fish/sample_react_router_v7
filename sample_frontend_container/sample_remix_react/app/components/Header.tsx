@@ -8,8 +8,6 @@ export default function Header() {
   // TODO: Loader関数の戻り値が多様化した場合に問題あり
   const user = useLoaderData<{ username: string; email: string }>();
 
-  console.log('header user', user);
-
   // 認証状況に応じて表示を切り替える
   if (user) {
     return <LoggedInHeader />;

@@ -24,6 +24,10 @@ module.exports = {
   // Base config
   extends: ['eslint:recommended', 'prettier'],
 
+  rules: {
+    'no-useless-catch': 'off', // no-useless-catch を無効化
+  },
+
   overrides: [
     // React
     {

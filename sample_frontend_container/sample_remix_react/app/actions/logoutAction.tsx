@@ -1,6 +1,9 @@
 import { redirect } from '@remix-run/node';
 import { fetchLogoutData } from '../utils/apis/fetchLogoutData';
 import { authTokenCookie } from '../utils/cookies';
+// NOTE: Remixのバックエンドで上手く動作するロガーがないためコメントしておく
+// import logger from '../utils/logger';
+
 /**
  * ログアウト処理を実行するアクション関数。
  *
@@ -11,23 +14,32 @@ import { authTokenCookie } from '../utils/cookies';
  * @returns {Promise<Response>} ログインページへのリダイレクトレスポンス。
  *
  * @throws {Error} ログアウトAPI呼び出し中にエラーが発生した場合にスローされます。
- *
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function logoutAction(request: Request) {
+  // logger.info('[logoutAction] start');
   try {
-    console.log('Action: Calling fetchLogoutData...');
-    // ログアウトAPIを呼び出し
-    const response = await fetchLogoutData();
-    // デバック用: レスポンスの内容をコンソールに出力
-    const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
-    console.log('Action: Received AuthToken:', authToken);
+    // logger.info('[logoutAction] Calling fetchLogoutData...');
 
-    // デバック用: クライアントから送信された既存のクッキーを取得
-    const existingCookiesHeader = request.headers.get('Cookie');
-    console.log('Action: Incoming cookies:', existingCookiesHeader);
+    // ログアウトAPIを呼び出し
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const response = await fetchLogoutData();
+
+    // デバッグ用: レスポンスの内容をコンソールに出力
+    // const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
+    // logger.debug('[logoutAction] Received AuthToken', { authToken: authToken });
+
+    // デバッグ用: クライアントから送信された既存のクッキーを取得
+    // const existingCookiesHeader = request.headers.get('Cookie');
+    // logger.debug('[logoutAction] Incoming cookies', {
+    //   existingCookiesHeader: existingCookiesHeader,
+    // });
 
     // Cookieを破棄するためにmax-age=0のCookieを作成
     const setCookieHeader = await authTokenCookie.serialize('', {});
+    // logger.debug('[logoutAction] Set-Cookie header:', {
+    //   setCookieHeader: setCookieHeader,
+    // });
 
     return redirect('/login', {
       headers: {
@@ -35,7 +47,9 @@ export async function logoutAction(request: Request) {
       },
     });
   } catch (error) {
-    console.error('Action: Error during logout', error);
+    // logger.error('[logoutAction] Error during logout', { error: error });
     throw error;
+  } finally {
+    // logger.info('[logoutAction] end');
   }
 }

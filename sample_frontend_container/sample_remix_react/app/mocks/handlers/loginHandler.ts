@@ -1,5 +1,6 @@
 // MSW（Mock Service Worker）から必要なモジュールをインポート
 import { http, HttpResponse } from 'msw';
+// import logger from '../../utils/logger';
 
 // ログインリクエストのボディの型定義
 export interface LoginRequestBody {
@@ -16,15 +17,20 @@ export const loginHandler = http.post(
   'http://localhost:5173/api/login',
   async ({ request }) => {
     try {
+      // logger.info(`[loginHandler] start`);
+
       // NOTE: リクエストのクローンを作成して、非同期でリクエストボディを取得
       const clonedRequest = request.clone();
       const rawBody = await clonedRequest.text(); // JSON文字列として取得
       const body = JSON.parse(rawBody) as LoginRequestBody;
 
       const { email, password } = body;
-      // 受け取ったメールアドレスとパスワードをコンソールに出力（デバッグ目的）
-      console.log('Received email:', email);
-      console.log('Received password:', password);
+
+      // 受け取ったメールアドレスとパスワードをログに記録
+      // logger.debug(`[loginHandler] Received email`, { email: email });
+      // logger.debug(`[loginHandler] Received password`, {
+      //   password: password,
+      // });
 
       // メールアドレスとパスワードの検証
       if (email === VALID_EMAIL && password === VALID_PASSWORD) {
@@ -34,12 +40,12 @@ export const loginHandler = http.post(
         // クッキーの設定を定義
         const setCookieHeader = `authToken=${jwt}; HttpOnly; Secure; SameSite=Lax; Path=/`;
 
+        // logger.info(`[loginHandler] Authentication successful, returning JWT`);
+
         // 成功レスポンスを返す
         return new HttpResponse(
-          // レスポンスボディとしてJSON形式のメッセージを設定
           JSON.stringify({ message: 'Logged in successfully' }),
           {
-            // HTTPステータスコードを200（OK）に設定
             status: 200,
             headers: {
               'Content-Type': 'application/json', // レスポンスの内容がJSONであることを示す
@@ -51,30 +57,37 @@ export const loginHandler = http.post(
         );
       } else {
         // 認証情報が無効な場合のエラーレスポンス
+        // logger.warn(`[loginHandler] Invalid credentials`, { email: email });
+
         return new HttpResponse(
           JSON.stringify({ message: 'ユーザ名またはパスワードが違います' }),
           {
-            status: 401, // HTTPステータスコードを401（Unauthorized）に設定
+            status: 401,
             headers: {
               'Content-Type': 'application/json',
             },
           },
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // リクエストボディのパース中にエラーが発生した場合の処理
-      console.error('Error parsing request body:', error);
+      // logger.error(`[loginHandler] Error parsing request body`, {
+      //   error: error,
+      // });
 
       // エラーレスポンスを返す
       return new HttpResponse(
         JSON.stringify({ message: 'Invalid request body' }),
         {
-          status: 400, // HTTPステータスコードを400（Bad Request）に設定
+          status: 400,
           headers: {
             'Content-Type': 'application/json',
           },
         },
       );
+    } finally {
+      // logger.info(`[loginHandler] end`);
     }
   },
 );

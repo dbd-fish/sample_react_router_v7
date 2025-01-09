@@ -24,7 +24,6 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     errorMessage = error.data || 'サーバーエラーが発生しました。';
   }
-  console.log('ErrorBoundary:', error);
 
   return (
     <div className="min-h-screen flex flex-col">
