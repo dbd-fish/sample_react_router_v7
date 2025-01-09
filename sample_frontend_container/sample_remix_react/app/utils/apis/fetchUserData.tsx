@@ -1,4 +1,4 @@
-import logger from '../../utils/logger';
+// import logger from '../../utils/logger';
 
 /**
  * ユーザー情報を取得する非同期関数
@@ -7,13 +7,13 @@ import logger from '../../utils/logger';
  * - 失敗時: null を返す
  */
 export const fetchUserData = async (request: Request) => {
-  logger.info('[fetchUserData] start');
+  // logger.info('[fetchUserData] start');
 
   const apiUrl = 'http://localhost:5173'; // 環境変数からURLを取得
-  logger.debug('[fetchUserData] API URL', { apiUrl: apiUrl });
+  // logger.debug('[fetchUserData] API URL', { apiUrl: apiUrl });
 
   const cookieHeader = request.headers.get('Cookie');
-  logger.debug('[fetchUserData] Cookie header', { cookieHeader: cookieHeader });
+  // logger.debug('[fetchUserData] Cookie header', { cookieHeader: cookieHeader });
 
   try {
     const response = await fetch(`${apiUrl}/api/get/me`, {
@@ -28,23 +28,23 @@ export const fetchUserData = async (request: Request) => {
 
     if (response.ok) {
       const data = await response.json();
-      logger.info('[fetchUserData] User data retrieved successfully');
-      logger.debug('[fetchUserData] User data', { data });
+      // logger.info('[fetchUserData] User data retrieved successfully');
+      // logger.debug('[fetchUserData] User data', { data });
 
       return { username: data.username, email: data.email };
     } else {
-      logger.warn('[fetchUserData] Failed to retrieve user data', {
-        status: response.status,
-        statusText: response.statusText,
-      });
+      // logger.warn('[fetchUserData] Failed to retrieve user data', {
+      //   status: response.status,
+      //   statusText: response.statusText,
+      // });
       return null;
     }
   } catch (error) {
-    logger.error('[fetchUserData] Unexpected error occurred', {
-      error: error,
-    });
+    // logger.error('[fetchUserData] Unexpected error occurred', {
+    //   error: error,
+    // });
     throw error;
   } finally {
-    logger.info('[fetchUserData] end');
+    // logger.info('[fetchUserData] end');
   }
 };

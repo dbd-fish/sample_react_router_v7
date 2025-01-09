@@ -1,5 +1,5 @@
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
-import logger from '../utils/logger';
+// import logger from '../utils/logger';
 
 /**
  * リクエストヘッダーから認証トークンを取得して検証します。
@@ -12,41 +12,41 @@ import logger from '../utils/logger';
  * @returns {Promise<void>} 成功した場合、特に値は返しません。
  */
 export async function authTokenLoader(request: Request) {
-  logger.info('[authTokenLoader] start');
+  // logger.info('[authTokenLoader] start');
   try {
     // HTTP-only クッキーの取得
     const cookieHeader = request.headers.get('Cookie');
-    logger.debug('[authTokenLoader] Incoming cookies', {
-      cookieHeader: cookieHeader,
-    });
+    // logger.debug('[authTokenLoader] Incoming cookies', {
+    //   cookieHeader: cookieHeader,
+    // });
 
     // authToken と csrfToken をクッキーから抽出
     const authTokenMatch = cookieHeader?.match(/authToken=([^;]+)/);
-    const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
+    // const csrfTokenMatch = cookieHeader?.match(/csrftoken=([^;]+)/);
 
     const authToken = authTokenMatch ? authTokenMatch[1] : null;
-    const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
+    // const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
 
-    logger.debug('[authTokenLoader] Extracted authToken', {
-      authToken: authToken,
-    });
-    logger.debug('[authTokenLoader] Extracted csrfToken', {
-      csrfToken: csrfToken,
-    });
+    // logger.debug('[authTokenLoader] Extracted authToken', {
+    //   authToken: authToken,
+    // });
+    // logger.debug('[authTokenLoader] Extracted csrfToken', {
+    //   csrfToken: csrfToken,
+    // });
 
     // authToken が存在しない場合はログインページへリダイレクト
     if (!authToken) {
-      logger.info('[authTokenLoader] Missing authToken, throwing error.');
+      // logger.info('[authTokenLoader] Missing authToken, throwing error.');
       throw new AuthenticationError('認証トークンが見つかりません。');
     }
 
-    logger.info('[authTokenLoader] completed successfully');
+    // logger.info('[authTokenLoader] completed successfully');
   } catch (error) {
-    logger.error('[authTokenLoader] Error occurred', {
-      error: error,
-    });
+    // logger.error('[authTokenLoader] Error occurred', {
+    //   error: error,
+    // });
     throw error;
   } finally {
-    logger.info('[authTokenLoader] end');
+    // logger.info('[authTokenLoader] end');
   }
 }

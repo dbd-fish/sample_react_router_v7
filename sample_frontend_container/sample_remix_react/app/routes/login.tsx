@@ -3,7 +3,7 @@ import { useActionData } from '@remix-run/react';
 import LoginForm from '../components/forms/LoginForm';
 import { fetchLoginData } from '../utils/apis/fetchLoginData';
 import { authCookie } from '../utils/cookies';
-import logger from '../utils/logger';
+// import logger from '../utils/logger';
 
 /**
  * ログインアクション関数:
@@ -12,43 +12,44 @@ import logger from '../utils/logger';
  * - 認証失敗時: エラーメッセージを返す。
  */
 export const action: ActionFunction = async ({ request }) => {
-  logger.info('[Login Action] start');
+  // logger.info('[Login Action] start');
   const formData = await request.formData();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  logger.debug('[Login Action] Received form data', { email: email, password: password });
+  // logger.debug('[Login Action] Received form data', { email: email, password: password });
 
   try {
     // fetchLoginDataを呼び出して認証トークンを取得
     const response = await fetchLoginData(email, password);
     const authToken = response.headers.get('set-cookie'); // 仮定: fetchLoginDataがauthTokenを返す
 
-    logger.info('[Login Action] Received AuthToken');
-    logger.debug('[Login Action] AuthToken', { authToken: authToken });
+    // logger.info('[Login Action] Received AuthToken');
+    // logger.debug('[Login Action] AuthToken', { authToken: authToken });
 
     // シリアライズしてレスポンスに設定
     const setCookieHeader = await authCookie.serialize(authToken);
 
-    logger.info(
-      '[Login Action] Authentication successful, redirecting to /mypage',
-    );
+    // logger.info(
+    //   '[Login Action] Authentication successful, redirecting to /mypage',
+    // );
     return redirect('/mypage', {
       headers: {
         'Set-Cookie': setCookieHeader,
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    logger.error('[Login Action] Error occurred', {
-      error: error
-    });
+    // logger.error('[Login Action] Error occurred', {
+    //   error: error
+    // });
 
     return new Response(JSON.stringify({ error: 'ログインに失敗しました' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     });
   } finally {
-    logger.info('[Login Action] end');
+    // logger.info('[Login Action] end');
   }
 };
 
@@ -59,8 +60,6 @@ export const action: ActionFunction = async ({ request }) => {
  */
 export default function LoginPage() {
   const actionData = useActionData<{ error?: string }>();
-
-  logger.info('[Login Page] Rendered LoginPage', { actionData });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

@@ -24,9 +24,10 @@ export const logoutHandler = http.post(
           },
         },
       );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // リクエストボディのパース中にエラーが発生した場合の処理
-      console.error('Error parsing request body:', error);
+      // console.error('Error parsing request body:', error);
 
       // エラーレスポンスを返す
       return new HttpResponse(

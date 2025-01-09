@@ -1,4 +1,4 @@
-import logger from '../../utils/logger';
+// import logger from '../../utils/logger';
 
 /**
  * ユーザーのログアウトを処理する非同期関数
@@ -7,12 +7,12 @@ import logger from '../../utils/logger';
  * - 失敗時: エラーメッセージをスロー
  */
 export const fetchLogoutData = async () => {
-  logger.info('[fetchLogoutData] start');
+  // logger.info('[fetchLogoutData] start');
 
   // NOTE: processが使用できないため、API URLを直接指定
   // const apiUrl = process.env.API_URL || 'http://localhost:5173'; // 環境変数からURLを取得
   const apiUrl = 'http://localhost:5173'; // API URLを直接指定
-  logger.debug('[fetchLogoutData] API URL', { apiUrl: apiUrl });
+  // logger.debug('[fetchLogoutData] API URL', { apiUrl: apiUrl });
 
   try {
     const response = await fetch(`${apiUrl}/api/logout`, {
@@ -22,21 +22,21 @@ export const fetchLogoutData = async () => {
     });
 
     if (response.ok) {
-      logger.info('[fetchLogoutData] Logout successful');
+      // logger.info('[fetchLogoutData] Logout successful');
       return response; // 必要に応じてデータを返す
     } else {
       const errorData = await response.json();
-      logger.warn('[fetchLogoutData] Logout failed', { errorData: errorData });
+      // logger.warn('[fetchLogoutData] Logout failed', { errorData: errorData });
 
       throw new Error(errorData.message || 'ログアウトに失敗しました');
     }
   } catch (error) {
-    logger.error('[fetchLogoutData] Unexpected error occurred', {
-      error: error,
-    });
+    // logger.error('[fetchLogoutData] Unexpected error occurred', {
+    //   error: error,
+    // });
 
     throw error;
   } finally {
-    logger.info('[fetchLogoutData] end');
+    // logger.info('[fetchLogoutData] end');
   }
 };
