@@ -1,5 +1,7 @@
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
 import { fetchUserData } from '../utils/apis/fetchUserData';
+import logger from '../utils/logger';
+
 /**
  * 外部APIから認証情報を取得します。
  *
@@ -8,22 +10,38 @@ import { fetchUserData } from '../utils/apis/fetchUserData';
  *     true の場合、認証情報が取得できないとエラーをスローします。
  * @throws {AuthenticationError} 認証情報が見つからず、`loginRequired` が true の場合にスローされます。
  * @returns {Promise<any>} 取得した認証情報。
- *
  */
 export async function userDataLoader(
   request: Request,
   loginRequired: boolean = true,
 ) {
-  // 外部API呼び出し
-  console.log('Loader: Fetching user data with authToken...');
-  const userData = await fetchUserData(request);
-  console.log('Loader: Retrieved user data:', userData);
+  logger.info('[userDataLoader] start', { loginRequired: loginRequired });
+  try {
+    // 外部API呼び出し
+    logger.info('[userDataLoader] Fetching user data with authToken', {
+      loginRequired: loginRequired,
+    });
+    const userData = await fetchUserData(request);
+    logger.debug('[userDataLoader] Retrieved user data', {
+      userData: userData,
+    });
 
-  // ログインが必須の画面では下記でエラーがスローされる
-  if (loginRequired && !userData) {
-    console.error('Loader: User data not found.');
-    throw new AuthenticationError('認証情報の取得に失敗しました。');
+    // ログインが必須の画面では下記でエラーがスローされる
+    if (loginRequired && !userData) {
+      logger.warn('[userDataLoader] User data not found.', { loginRequired: loginRequired });
+      throw new AuthenticationError('認証情報の取得に失敗しました。');
+    }
+
+    logger.info('[userDataLoader] completed successfully', {
+      userDataExists: !!userData,
+    });
+    return userData;
+  } catch (error) {
+    logger.error('[userDataLoader] Error occurred', {
+      error: error
+    });
+    throw error;
+  } finally {
+    logger.info('[userDataLoader] end');
   }
-
-  return userData;
 }

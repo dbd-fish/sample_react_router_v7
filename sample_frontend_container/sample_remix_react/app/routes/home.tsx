@@ -4,6 +4,7 @@ import { LoaderFunction, redirect, ActionFunction } from '@remix-run/node';
 import { userDataLoader } from '../loaders/userDataLoader';
 import { AuthenticationError } from '../utils/errors/AuthenticationError';
 import { logoutAction } from '../actions/logoutAction';
+import logger from '../utils/logger';
 
 /**
  * ローダー関数:
@@ -12,8 +13,12 @@ import { logoutAction } from '../actions/logoutAction';
  * - 失敗時: 401エラーをスロー
  */
 export const loader: LoaderFunction = async ({ request }) => {
+  logger.info('[Home Loader] start');
   try {
     const userData = await userDataLoader(request, false);
+
+    logger.info('[Home Loader] Successfully retrieved user data');
+    logger.debug('[Home Loader] User data', { userData });
 
     // 正常なレスポンスを返す
     return new Response(JSON.stringify(userData), {
@@ -21,39 +26,55 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   } catch (error) {
     if (error instanceof AuthenticationError) {
-      console.log('Loader: AuthenticationError:');
+      logger.warn('[Home Loader] AuthenticationError occurred');
       return redirect('/login');
     }
-    console.error('Loader Error:', error);
+
+    logger.error('[Home Loader] Unexpected error occurred', {
+      error: error,
+    });
 
     throw new Response('ユーザーデータの取得に失敗しました。', {
       status: 400,
     });
+  } finally {
+    logger.info('[Home Loader] end');
   }
 };
 
 // NOTE: ログアウトが必要な画面ではこれと似たAction関数を実装する必要あり
+/**
+ * アクション関数:
+ * - クライアントからのアクションを処理
+ * - ログアウトやその他のアクションを処理
+ */
 export const action: ActionFunction = async ({ request }) => {
+  logger.info('[Home Action] start');
   try {
     const formData = await request.formData();
     const actionType = formData.get('_action');
 
-    console.log('Action: Received actionType:', actionType);
+    logger.debug('[Home Action] Received actionType', { actionType });
 
     if (actionType === 'logout') {
-      const respons = await logoutAction(request);
-      return respons;
+      const response = await logoutAction(request);
+      logger.info('[Home Action] Logout action processed successfully');
+      return response;
     }
 
-    console.log('Action: No valid actionType provided.');
+    logger.warn('[Home Action] No valid actionType provided');
     throw new Response('サーバー上で不具合が発生しました', {
       status: 400,
     });
   } catch (error) {
-    console.error('aaaaAction: Error occurred:', error);
+    logger.error('[Home Action] Unexpected error occurred', {
+      error: error
+    });
     throw new Response('サーバー上で予期しないエラーが発生しました', {
       status: 400,
     });
+  } finally {
+    logger.info('[Home Action] end');
   }
 };
 

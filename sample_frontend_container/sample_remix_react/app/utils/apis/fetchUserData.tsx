@@ -1,36 +1,50 @@
-// sample_frontend_container/sample_remix_react/app/utils/api.ts
+import logger from '../../utils/logger';
 
 /**
  * ユーザー情報を取得する非同期関数
  * - '/api/get/me' エンドポイントからユーザー情報を取得
  * - 成功時: ユーザー情報オブジェクトを返す
- * - 失敗時: エラーメッセージをスロー
+ * - 失敗時: null を返す
  */
 export const fetchUserData = async (request: Request) => {
-  console.log('fetchUserData: start'); // 関数開始時のログ
+  logger.info('[fetchUserData] start');
 
   const apiUrl = 'http://localhost:5173'; // 環境変数からURLを取得
-  console.log('fetchUserData: apiUrl', apiUrl); // API URLのログ
+  logger.debug('[fetchUserData] API URL', { apiUrl: apiUrl });
 
   const cookieHeader = request.headers.get('Cookie');
-  console.log('fetchUserData: Cookie header:', cookieHeader);
+  logger.debug('[fetchUserData] Cookie header', { cookieHeader: cookieHeader });
 
-  const response = await fetch(`${apiUrl}/api/get/me`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      // NOTE: credentials: 'include'だけではなく下記のようにクッキーを明示的に渡さないとCookieが送信されない
-      Cookie: cookieHeader || '',
-    },
-    credentials: 'include', // Cookieを送信
-  });
+  try {
+    const response = await fetch(`${apiUrl}/api/get/me`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // NOTE: credentials: 'include'だけではなく下記のようにクッキーを明示的に渡さないとCookieが送信されない
+        Cookie: cookieHeader || '', // 明示的にクッキーを渡す
+      },
+      credentials: 'include', // Cookieを送信
+    });
 
-  if (response.ok) {
-    const data = await response.json();
-    console.log('fetchUserData: success', data); // 成功時のログ
-    return { username: data.username, email: data.email };
-  } else {
-    console.log('fetchUserData: failed', response.status); // エラー時のログ
-    return null;
+    if (response.ok) {
+      const data = await response.json();
+      logger.info('[fetchUserData] User data retrieved successfully');
+      logger.debug('[fetchUserData] User data', { data });
+
+      return { username: data.username, email: data.email };
+    } else {
+      logger.warn('[fetchUserData] Failed to retrieve user data', {
+        status: response.status,
+        statusText: response.statusText,
+      });
+      return null;
+    }
+  } catch (error) {
+    logger.error('[fetchUserData] Unexpected error occurred', {
+      error: error,
+    });
+    throw error;
+  } finally {
+    logger.info('[fetchUserData] end');
   }
 };
