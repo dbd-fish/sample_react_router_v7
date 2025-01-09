@@ -3,6 +3,7 @@ import build from 'pino-abstract-transport';
 import fs from 'fs';
 import path from 'path';
 import { format } from 'date-fns';
+import * as dateFnsTz from 'date-fns-tz'; // 修正：正しいインポート形式
 import { fileURLToPath } from 'url';
 
 // 現在のファイルのディレクトリを取得し、その1つ上のディレクトリを指定
@@ -36,41 +37,27 @@ const checkDateAndRotate = (): void => {
   }
 };
 
-// ログ発生元のファイルパスと行番号を取得する関数
-const getCallerInfo = (): string => {
-  const originalFunc = Error.prepareStackTrace;
-  Error.prepareStackTrace = (_, stack) => stack;
-  const err = new Error();
-  const stack = err.stack as unknown as NodeJS.CallSite[];
-  Error.prepareStackTrace = originalFunc;
-
-  // スタックトレースの3番目の呼び出し元を取得
-  const caller = stack[2];
-  const fileName = caller.getFileName();
-  const lineNumber = caller.getLineNumber();
-  return `${fileName}:${lineNumber}`;
-};
+// タイムゾーン設定（日本時間 JST）
+const timeZone = 'Asia/Tokyo';
 
 // Pinoロガーの定義
 const transport = build(async function (source) {
   for await (const obj of source) {
     checkDateAndRotate();
 
-    // 現在の日時をミリ秒単位で取得
-    const timestamp = format(new Date(), 'yyyy-MM-dd HH:mm:ss.SSS');
+    // 現在の日時を日本時間（JST）に変換して取得
+    const now = new Date();
+    const zonedDate = dateFnsTz.toZonedTime(now, timeZone); // 修正：正しいインポート形式に対応
+    const timestamp = format(zonedDate, 'yyyy-MM-dd HH:mm:ss.SSS'); // 日本時間でフォーマット
     obj.time = timestamp; // `time` フィールドをカスタマイズ
 
-    // ログ発生元の情報を追加
-    const callerInfo = getCallerInfo();
-    obj.caller = callerInfo;
-
-    // フィールドの順序を調整
+    // 動的カスタムフィールドを正確に含めるよう変更
     const logMessage = JSON.stringify({
       time: obj.time,
       level: obj.level,
       pid: obj.pid,
       hostname: obj.hostname,
-      msg: obj.msg,
+      ...obj, // 追加されたすべてのカスタムフィールドを含む
     });
 
     logStream.write(logMessage + '\n');
