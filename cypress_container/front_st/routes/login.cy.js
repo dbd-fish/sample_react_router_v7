@@ -1,4 +1,13 @@
 describe('ログイン画面の単体テスト', () => {
+
+  let loginData;
+  before(() => {
+    // テストデータを読み込む
+    cy.fixture('loginData').then((data) => {
+      loginData = data;
+    });
+  });
+
   it('フォームに正しく入力して送信', () => {
     cy.visit('/login');
 
@@ -9,11 +18,11 @@ describe('ログイン画面の単体テスト', () => {
     // NOTE: ここで正しいemailとパスワードの組み合わせは別コンテナを参照する必要がある
     cy.get('input#email')
       .should('be.enabled') // 要素が有効になるまで待機
-      .type('user@example.com');
+      .type(loginData.correctEmail);
 
     cy.get('input#password')
       .should('be.enabled')
-      .type('securepassword');
+      .type(loginData.correctPassword);
 
     cy.get('button[type="submit"]').click();
     cy.wait(1000); // または適切な時間
@@ -30,10 +39,10 @@ describe('ログイン画面の単体テスト', () => {
     // 間違ったメールアドレスを入力
     cy.get('input#email')
       .should('be.enabled') // 要素が有効になるまで待機
-      .type('aaaa@example.com');
+      .type(loginData.incorrectEmail);
     cy.get('input#password')
       .should('be.enabled')
-      .type('securepassword');
+      .type(loginData.correctPassword);
 
 
     // ログインボタンをクリック
