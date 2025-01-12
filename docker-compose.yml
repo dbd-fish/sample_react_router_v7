@@ -21,7 +21,8 @@ services:
     # command: >
     #   sh -c "npx remix vite:build &&
     #          npx remix-serve build/server/index.js"
-
+    networks:
+      - app-network    # この行を追加
 #   backend:
 #     container_name: sample_backend_container
 #     image: sample_backend_image
@@ -57,4 +58,24 @@ services:
 # volumes:
 #   postgres_data:
 
+  cypress:
+    build:
+      context: ./cypress_container
+      dockerfile: Dockerfile
+    image: cypress/included:13.17.0
+    container_name: cypress_container
+    environment:
+      DISPLAY: ${DISPLAY} # ホストのDISPLAY変数を渡す
+    volumes:
+      - ./cypress_container:/e2e # テストコードをマウント
+      - /tmp/.X11-unix:/tmp/.X11-unix # Xサーバーソケットを共有
+    depends_on:
+      - frontend
+    networks:
+      - app-network
+    tty: true
+    stdin_open: true
 
+networks:
+  app-network:
+    driver: bridge

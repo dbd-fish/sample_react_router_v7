@@ -68,7 +68,10 @@ export default function LoginPage() {
           ログイン
         </h1>
         {actionData?.error && (
-          <div className="mb-4 text-sm text-red-500 border border-red-400 bg-red-100 px-4 py-2 rounded">
+          <div
+            id="error-message"
+            className="mb-4 text-sm text-red-500 border border-red-400 bg-red-100 px-4 py-2 rounded"
+          >
             {actionData.error}
           </div>
         )}
