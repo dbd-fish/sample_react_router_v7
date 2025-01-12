@@ -6,7 +6,7 @@ import { Form } from '@remix-run/react';
  */
 export default function LoginForm() {
   return (
-    <Form method="post" className="space-y-6">
+    <Form  id="login-form" method="post" className="space-y-6">
       {/* メールアドレス入力フィールド */}
       <div>
         <label
