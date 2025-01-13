@@ -1,5 +1,5 @@
-import SiteTitle from '../SiteTitle';
-import SearchForm from '../forms/SearchForm';
+import SiteTitle from '~/components/SiteTitle';
+import SearchForm from '~/components/forms/SearchForm';
 
 export default function Header() {
   return (

@@ -2,14 +2,14 @@
 
 import { LoaderFunction, ActionFunction, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import ProfileCard from '../components/mypage/ProfileCard';
-import { userDataLoader } from '../loaders/userDataLoader';
-import { authTokenLoader } from '../loaders/authTokenLoader';
-import { AuthenticationError } from '../utils/errors/AuthenticationError';
-import { logoutAction } from '../actions/logoutAction';
-// import logger from '../utils/logger';
+import Header from '~/components/Header';
+import Footer from '~/components/Footer';
+import ProfileCard from '~/components/mypage/ProfileCard';
+import { userDataLoader } from '~/loaders/userDataLoader';
+import { authTokenLoader } from '~/loaders/authTokenLoader';
+import { AuthenticationError } from '~/utils/errors/AuthenticationError';
+import { logoutAction } from '~/actions/logoutAction';
+// import logger from '~/utils/logger';
 import { LoaderDataType } from '~/utils/types';
 
 /**

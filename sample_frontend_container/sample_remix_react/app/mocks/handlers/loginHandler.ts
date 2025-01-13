@@ -1,6 +1,6 @@
 // MSW（Mock Service Worker）から必要なモジュールをインポート
 import { http, HttpResponse } from 'msw';
-// import logger from '../../utils/logger';
+// import logger from '.~/utils/logger';
 
 // ログインリクエストのボディの型定義
 export interface LoginRequestBody {

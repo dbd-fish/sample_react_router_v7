@@ -1,5 +1,5 @@
-import { AuthenticationError } from '../utils/errors/AuthenticationError';
-// import logger from '../utils/logger';
+import { AuthenticationError } from '~/utils/errors/AuthenticationError';
+// import logger from '~/utils/logger';
 
 /**
  * リクエストヘッダーから認証トークンを取得して検証します。

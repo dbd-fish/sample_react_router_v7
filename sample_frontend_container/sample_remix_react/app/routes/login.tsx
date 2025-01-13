@@ -1,9 +1,9 @@
 import { ActionFunction, redirect } from '@remix-run/node';
 import { useActionData } from '@remix-run/react';
-import LoginForm from '../components/forms/LoginForm';
-import { fetchLoginData } from '../utils/apis/fetchLoginData';
-import { authCookie } from '../utils/cookies';
-// import logger from '../utils/logger';
+import LoginForm from '~/components/forms/LoginForm';
+import { fetchLoginData } from '~/utils/apis/fetchLoginData';
+import { authCookie } from '~/utils/cookies';
+// import logger from '~/utils/logger';
 
 /**
  * ログインアクション関数:

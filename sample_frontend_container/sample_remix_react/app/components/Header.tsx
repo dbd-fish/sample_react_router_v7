@@ -1,6 +1,6 @@
 // NOTE: バックエンド連携するときに見直す必要あり
-import LoggedInHeader from './header/LoggedInHeade';
-import LoggedOutHeader from './header/LoggedOutHeader';
+import LoggedInHeader from '~/components/header/LoggedInHeade';
+import LoggedOutHeader from '~/components/header/LoggedOutHeader';
 import { useLoaderData } from '@remix-run/react';
 import { LoaderDataType } from '~/utils/types';
 
