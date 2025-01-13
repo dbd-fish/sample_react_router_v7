@@ -49,7 +49,9 @@ module.exports = {
           { name: 'NavLink', linkAttribute: 'to' },
         ],
         'import/resolver': {
-          typescript: {},
+          typescript: {
+            project: './tsconfig.json', // tsconfig.json のパスを指定
+          },
         },
       },
     },
@@ -66,11 +68,17 @@ module.exports = {
             extensions: ['.ts', '.tsx'],
           },
           typescript: {
+            project: './tsconfig.json', // tsconfig.json のパスを指定
+
             alwaysTryTypes: true,
           },
         },
       },
-      extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'plugin:import/typescript'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        // 'plugin:import/recommended', // NOTE: これが原因で~による相対インポートが機能しなかった
+        'plugin:import/typescript',
+      ],
     },
 
     // Node
