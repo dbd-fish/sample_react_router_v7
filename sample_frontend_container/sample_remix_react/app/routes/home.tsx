@@ -16,12 +16,14 @@ export const loader: LoaderFunction = async ({ request }) => {
   // logger.info('[Home Loader] start');
   try {
     const userData = await userDataLoader(request, false);
-
+    const responseBody = {
+      user: userData,
+    };
     // logger.info('[Home Loader] Successfully retrieved user data');
     // logger.debug('[Home Loader] User data', { userData });
 
     // 正常なレスポンスを返す
-    return new Response(JSON.stringify(userData), {
+    return new Response(JSON.stringify(responseBody), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
