@@ -1,8 +1,8 @@
 import { redirect } from '@remix-run/node';
-import { fetchLogoutData } from '../utils/apis/fetchLogoutData';
-import { authTokenCookie } from '../utils/cookies';
+import { fetchLogoutData } from '~/utils/apis/fetchLogoutData';
+import { authTokenCookie } from '~/utils/cookies';
 // NOTE: Remixのバックエンドで上手く動作するロガーがないためコメントしておく
-// import logger from '../utils/logger';
+// import logger from '~/utils/logger';
 
 /**
  * ログアウト処理を実行するアクション関数。

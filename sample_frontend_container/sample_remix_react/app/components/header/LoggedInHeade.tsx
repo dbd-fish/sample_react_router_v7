@@ -1,11 +1,9 @@
 import { useState, useRef, useCallback } from 'react';
-import SearchForm from '../forms/SearchForm'; // 検索フォームのコンポーネントをインポート
-import SiteTitle from '../SiteTitle'; // サイトタイトル用のコンポーネントをインポート
-import useClickOutside from '../../hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
-// import { useLogout } from '../../hooks/useLogout'; // ログアウト処理をカスタムフックからインポート
+import SearchForm from '~/components/forms/SearchForm'; // 検索フォームのコンポーネントをインポート
+import SiteTitle from '~/components/SiteTitle'; // サイトタイトル用のコンポーネントをインポート
+import useClickOutside from '~/hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
 import { useLoaderData, useSubmit } from '@remix-run/react';
-// import { fetchLogoutData } from '../../utils/api/fetchLogoutData';
-// import { useAuth } from '../../hooks/useAuth';
+import { LoaderDataType } from '~/utils/types';
 
 /**
  * ヘッダーコンポーネント
@@ -14,7 +12,8 @@ import { useLoaderData, useSubmit } from '@remix-run/react';
  */
 export default function Header() {
   // コンテキストからユーザー情報を取得
-  const user = useLoaderData<{ username: string; email: string }>();
+  const loaderData = useLoaderData<LoaderDataType>();
+  const user = loaderData.user;
 
   const submit = useSubmit();
   // NOTE: このあたりの処理とAction関数の処理を確認する

@@ -1,15 +1,17 @@
 // NOTE: バックエンド連携するときに見直す必要あり
-import LoggedInHeader from './header/LoggedInHeade';
-import LoggedOutHeader from './header/LoggedOutHeader';
+import LoggedInHeader from '~/components/header/LoggedInHeade';
+import LoggedOutHeader from '~/components/header/LoggedOutHeader';
 import { useLoaderData } from '@remix-run/react';
+import { LoaderDataType } from '~/utils/types';
 
 export default function Header() {
   // ローダー関数で取得したユーザー情報を取得
-  // TODO: Loader関数の戻り値が多様化した場合に問題あり
-  const user = useLoaderData<{ username: string; email: string }>();
+  // NOTE: 共通のLoader関数の戻り値の型定義を使用
+  const loaderData = useLoaderData<LoaderDataType>();
+  console.log('Header: user', loaderData);
 
   // 認証状況に応じて表示を切り替える
-  if (user) {
+  if (loaderData.user) {
     return <LoggedInHeader />;
   } else {
     return <LoggedOutHeader />;

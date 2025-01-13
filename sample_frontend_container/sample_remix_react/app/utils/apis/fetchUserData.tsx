@@ -1,4 +1,4 @@
-// import logger from '../../utils/logger';
+// import logger from '~/utils/logger';
 
 /**
  * ユーザー情報を取得する非同期関数

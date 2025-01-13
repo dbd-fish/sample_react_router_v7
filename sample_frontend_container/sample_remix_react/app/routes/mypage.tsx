@@ -2,14 +2,15 @@
 
 import { LoaderFunction, ActionFunction, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import ProfileCard from '../components/mypage/ProfileCard';
-import { userDataLoader } from '../loaders/userDataLoader';
-import { authTokenLoader } from '../loaders/authTokenLoader';
-import { AuthenticationError } from '../utils/errors/AuthenticationError';
-import { logoutAction } from '../actions/logoutAction';
-// import logger from '../utils/logger';
+import Header from '~/components/Header';
+import Footer from '~/components/Footer';
+import ProfileCard from '~/components/mypage/ProfileCard';
+import { userDataLoader } from '~/loaders/userDataLoader';
+import { authTokenLoader } from '~/loaders/authTokenLoader';
+import { AuthenticationError } from '~/utils/errors/AuthenticationError';
+import { logoutAction } from '~/actions/logoutAction';
+// import logger from '~/utils/logger';
+import { LoaderDataType } from '~/utils/types';
 
 /**
  * ローダー関数:
@@ -27,8 +28,11 @@ export const loader: LoaderFunction = async ({ request }) => {
     // logger.info('[MyPage Loader] Successfully retrieved user data');
     // logger.debug('[MyPage Loader] User data', { userData: userData });
 
+    const responseBody = {
+      user: userData,
+    };
     // 正常なレスポンスを返す
-    return new Response(JSON.stringify(userData), {
+    return new Response(JSON.stringify(responseBody), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
@@ -92,7 +96,7 @@ export const action: ActionFunction = async ({ request }) => {
  * - ユーザー情報を表示するページ
  */
 export default function MyPage() {
-  const loaderData = useLoaderData<{ username: string; email: string }>();
+  const loaderData = useLoaderData<LoaderDataType>();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -105,9 +109,10 @@ export default function MyPage() {
             <div className="w-full md:w-2/3 bg-gray-50 rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-semibold text-gray-700 mb-4">概要</h2>
               <p className="text-gray-600">
-                名前: {loaderData.username}
+                {/* loaderDataの中にuserが存在するか確認するためオプショナルチェーン (?.)をつける */}
+                名前: {loaderData.user?.username}
                 <br />
-                メール: {loaderData.email}
+                メール: {loaderData.user?.email}
                 <br />
                 あなたのアカウント情報や、活動の概要をここに表示します。好きな項目をクリックして更新したり、詳細を確認してください。
               </p>

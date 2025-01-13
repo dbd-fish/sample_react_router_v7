@@ -1,6 +1,6 @@
-import { AuthenticationError } from '../utils/errors/AuthenticationError';
-import { fetchUserData } from '../utils/apis/fetchUserData';
-// import logger from '../utils/logger';
+import { AuthenticationError } from '~/utils/errors/AuthenticationError';
+import { fetchUserData } from '~/utils/apis/fetchUserData';
+// import logger from '~/utils/logger';
 
 /**
  * 外部APIから認証情報を取得します。

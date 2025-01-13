@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-// import logger from '../../utils/logger';
+// import logger from '~/utils/logger';
 
 // ユーザー情報のモックデータ
 const MOCK_USER = {
