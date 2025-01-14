@@ -3,10 +3,10 @@ Docker環境でReact(Remix)を使用してログイン画面、マイページ�
 Cypress用のコンテナを作成してCypressによる自動テストを少し試してみました。
 
 ## ポイント
-cert.pemとkey.pemを準備すればHTTPSでLocalhostを起動できる
-CypressによるE2Eテストが可能
-HttpOnlyCookieに認証情報を格納してAPIに送信する。
-mswでAPIをモックする
+- cert.pemとkey.pemを準備すればHTTPSでLocalhostを起動できる
+- CypressによるE2Eテストが可能
+- HttpOnlyCookieに認証情報を格納してAPIに送信する。
+- mswでAPIをモックする
 
 # 主な技術スタック
 - 環境構築: 
@@ -176,7 +176,7 @@ C:.
 
 # 環境構築手順
 localhostをHTTPSで起動するためにcert.pemとkey.pemを生成する。
-Windows端末でcert.pemとkey.pemを生成する方法は下記に記載。
+Windows端末でcert.pemとkey.pemを生成する方法は下記に記載。  
 https://github.com/dbd-fish/react_sample/issues/12#issuecomment-2570993736
 
 cert.pemとkey.pemを下記に格納。
