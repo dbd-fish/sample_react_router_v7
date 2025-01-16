@@ -1,4 +1,4 @@
-import { useSubmit } from '@remix-run/react';
+import { useSubmit } from 'react-router';
 
 export default function SearchForm() {
   const submit = useSubmit();

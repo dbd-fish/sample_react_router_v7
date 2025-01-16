@@ -1,6 +1,6 @@
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
-import { LoaderFunction, redirect, ActionFunction } from '@remix-run/node';
+import { LoaderFunction, redirect, ActionFunction } from 'react-router';
 import { userDataLoader } from '~/loaders/userDataLoader';
 import { AuthenticationError } from '~/utils/errors/AuthenticationError';
 import { logoutAction } from '~/actions/logoutAction';

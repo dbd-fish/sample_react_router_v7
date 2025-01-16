@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { redirect } from 'react-router';
 import { fetchLogoutData } from '~/utils/apis/fetchLogoutData';
 import { authTokenCookie } from '~/utils/cookies';
 // NOTE: Remixのバックエンドで上手く動作するロガーがないためコメントしておく

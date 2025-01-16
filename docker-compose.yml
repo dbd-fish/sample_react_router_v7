@@ -3,7 +3,7 @@ services:
     build:
       context: ./sample_frontend_container
       dockerfile: Dockerfile
-    container_name: sample_frontend_container
+    container_name: sample_frontend_container2
     image: sample_frontend_container
     deploy:
       resources:

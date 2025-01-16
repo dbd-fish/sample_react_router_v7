@@ -1,5 +1,5 @@
 import { LoaderDataType } from '~/utils/types';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData } from 'react-router';
 
 export default function ProfileCard() {
   const loaderData = useLoaderData<LoaderDataType>();

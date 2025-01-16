@@ -6,11 +6,11 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   useRouteError,
-} from '@remix-run/react';
-import type { LinksFunction } from '@remix-run/node';
+} from 'react-router';
+import type { LinksFunction } from 'react-router';
 
 import './tailwind.css';
-import Header from './components/Header';
+import Header from './components//header/LoggedOutHeader';
 import Footer from './components/Footer';
 
 // NOTE:暫定的にここにエラー画面を記載

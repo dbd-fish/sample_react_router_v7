@@ -1,0 +1,22 @@
+// vite.config.ts
+import { reactRouter } from "file:///app/sample_remix_react/node_modules/@react-router/dev/dist/vite.js";
+import { defineConfig } from "file:///app/sample_remix_react/node_modules/vite/dist/node/index.js";
+import tsconfigPaths from "file:///app/sample_remix_react/node_modules/vite-tsconfig-paths/dist/index.mjs";
+var vite_config_default = defineConfig({
+  plugins: [reactRouter(), tsconfigPaths()],
+  server: {
+    watch: {
+      usePolling: true
+    },
+    // NOTE:HTTPSサーバーを起動するための設定
+    proxy: {},
+    https: {
+      key: "./certs/key.pem",
+      cert: "./certs/cert.pem"
+    }
+  }
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcudHMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCIvYXBwL3NhbXBsZV9yZW1peF9yZWFjdFwiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9maWxlbmFtZSA9IFwiL2FwcC9zYW1wbGVfcmVtaXhfcmVhY3Qvdml0ZS5jb25maWcudHNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL2FwcC9zYW1wbGVfcmVtaXhfcmVhY3Qvdml0ZS5jb25maWcudHNcIjtpbXBvcnQgeyByZWFjdFJvdXRlciB9IGZyb20gJ0ByZWFjdC1yb3V0ZXIvZGV2L3ZpdGUnO1xyXG5pbXBvcnQgeyBkZWZpbmVDb25maWcgfSBmcm9tICd2aXRlJztcclxuaW1wb3J0IHRzY29uZmlnUGF0aHMgZnJvbSAndml0ZS10c2NvbmZpZy1wYXRocyc7XHJcblxyXG4vLyBkZWNsYXJlIG1vZHVsZSAnQHJlbWl4LXJ1bi9ub2RlJyB7XHJcbi8vICAgaW50ZXJmYWNlIEZ1dHVyZSB7XHJcbi8vICAgICB2M19zaW5nbGVGZXRjaDogdHJ1ZTtcclxuLy8gICB9XHJcbi8vIH1cclxuXHJcbmV4cG9ydCBkZWZhdWx0IGRlZmluZUNvbmZpZyh7XHJcbiAgcGx1Z2luczogW3JlYWN0Um91dGVyKCksIHRzY29uZmlnUGF0aHMoKV0sXHJcbiAgc2VydmVyOiB7XHJcbiAgICB3YXRjaDoge1xyXG4gICAgICB1c2VQb2xsaW5nOiB0cnVlLFxyXG4gICAgfSxcclxuICAgIC8vIE5PVEU6SFRUUFNcdTMwQjVcdTMwRkNcdTMwRDBcdTMwRkNcdTMwOTJcdThENzdcdTUyRDVcdTMwNTlcdTMwOEJcdTMwNUZcdTMwODFcdTMwNkVcdThBMkRcdTVCOUFcclxuICAgIHByb3h5OiB7fSxcclxuICAgIGh0dHBzOiB7XHJcbiAgICAgIGtleTogJy4vY2VydHMva2V5LnBlbScsXHJcbiAgICAgIGNlcnQ6ICcuL2NlcnRzL2NlcnQucGVtJyxcclxuICAgIH0sXHJcbiAgfSxcclxufSk7XHJcbiJdLAogICJtYXBwaW5ncyI6ICI7QUFBdVAsU0FBUyxtQkFBbUI7QUFDblIsU0FBUyxvQkFBb0I7QUFDN0IsT0FBTyxtQkFBbUI7QUFRMUIsSUFBTyxzQkFBUSxhQUFhO0FBQUEsRUFDMUIsU0FBUyxDQUFDLFlBQVksR0FBRyxjQUFjLENBQUM7QUFBQSxFQUN4QyxRQUFRO0FBQUEsSUFDTixPQUFPO0FBQUEsTUFDTCxZQUFZO0FBQUEsSUFDZDtBQUFBO0FBQUEsSUFFQSxPQUFPLENBQUM7QUFBQSxJQUNSLE9BQU87QUFBQSxNQUNMLEtBQUs7QUFBQSxNQUNMLE1BQU07QUFBQSxJQUNSO0FBQUEsRUFDRjtBQUNGLENBQUM7IiwKICAibmFtZXMiOiBbXQp9Cg==

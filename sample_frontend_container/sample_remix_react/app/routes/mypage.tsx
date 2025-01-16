@@ -1,7 +1,7 @@
 // sample_frontend_container/sample_remix_react/app/routes/mypage.tsx
 
-import { LoaderFunction, ActionFunction, redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { LoaderFunction, ActionFunction, redirect } from 'react-router';
+import { useLoaderData } from 'react-router';
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
 import ProfileCard from '~/components/mypage/ProfileCard';
