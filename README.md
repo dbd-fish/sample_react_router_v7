@@ -76,64 +76,63 @@ C:.
     │  .env                   # 環境変数を格納
     │  Dockerfile             # フロントエンド環境を構築するDocker設定ファイル
     │  
-    ├─.vscode                 # VS Codeの設定ファイル
+    ├─.vscode                 # VS Codeの設定ディレクトリ
     │      settings.json      # ワークスペース固有の設定
     │      
-    └─sample_remix_react      # フロントエンドアプリケーションの主要ディレクトリ (Remix使用)
+    └─sample_react-router      # フロントエンドアプリケーションの主要ディレクトリ (Remix使用)
         │  .eslintrc.cjs      # ESLintの設定ファイル
         │  .gitignore         # Gitで追跡しないファイルを定義
         │  .prettierrc        # Prettierの設定ファイル
         │  package-lock.json  # npm依存関係のロックファイル
         │  package.json       # プロジェクトの依存関係とスクリプト
-        │  postcss.config.js  # PostCSSの設定ファイル
-        │  README.md          # このディレクトリ固有の説明書
-        │  tailwind.config.ts # Tailwind CSSの設定
+        │  react-router.config.ts # React Routerの設定ファイル
+        │  tailwind.config.ts # Tailwind CSSの設定ファイル
         │  tsconfig.json      # TypeScriptの設定
-        │  vite.config.ts     # Viteの設定
+        │  vite.config.ts     # Viteの設定ファイル
         │  
-        ├─.vscode             # フロントエンドのVS Code設定
+        ├─.react-router       # React Router関連の一時ディレクトリや設定ファイルを格納
         ├─app                 # アプリケーションのメインコード
         │  │  entry.client.tsx  # クライアントサイドエントリポイント
         │  │  entry.server.tsx  # サーバーサイドエントリポイント
         │  │  error-boundary.tsx # エラーバウンドリコンポーネント
         │  │  root.tsx         # アプリケーションのルートコンポーネント
-        │  │  tailwind.css     # Tailwind CSSのメインスタイル
+        │  │  routes.ts        # ルート設定ファイル
+        │  │  tailwind.css     # Tailwind CSSのスタイル
         │  │  
-        │  ├─actions           # Action関数の共通処理
+        │  ├─actions           # Action関数 (フォーム送信など) のロジック
         │  │      logoutAction.tsx # ログアウト処理
         │  │      
         │  ├─components        # UIコンポーネント
-        │  │  │  ErrorMessage.tsx # エラーメッセージ表示
-        │  │  │  Footer.tsx     # フッターコンポーネント
-        │  │  │  Header.tsx     # ヘッダーコンポーネント
-        │  │  │  SiteTitle.tsx  # サイトタイトル表示
+        │  │  │  ErrorMessage.tsx # エラーメッセージ表示用のコンポーネント
+        │  │  │  Footer.tsx     # フッター部分のUIコンポーネント
+        │  │  │  Header.tsx     # ヘッダー部分のUIコンポーネント
+        │  │  │  SiteTitle.tsx  # サイトタイトル表示用のコンポーネント
         │  │  │  
         │  │  ├─forms           # フォームコンポーネント
-        │  │  │      LoginForm.tsx # ログインフォーム
+        │  │  │      LoginForm.tsx # ログイン用フォーム
         │  │  │      SearchForm.tsx # 検索フォーム
         │  │  │      
         │  │  ├─header          # ヘッダーのバリエーション
-        │  │  │      LoggedInHeade.tsx   # ログイン時のヘッダー
-        │  │  │      LoggedOutHeader.tsx # ログアウト時のヘッダー
+        │  │  │      LoggedInHeade.tsx   # ログイン時に表示されるヘッダー
+        │  │  │      LoggedOutHeader.tsx # 未ログイン時に表示されるヘッダー
         │  │  │      
         │  │  ├─layout          # レイアウト関連コンポーネント
-        │  │  │      Footer.tsx  # レイアウト用フッター
+        │  │  │      Footer.tsx  # フッター部分のレイアウト
         │  │  │      Navbar.tsx  # ナビゲーションバー
         │  │  │      
-        │  │  └─mypage          # マイページ関連コンポーネント
-        │  │          ProfileCard.tsx # プロフィールカード
+        │  │  └─mypage          # マイページ関連のコンポーネント
+        │  │          ProfileCard.tsx # プロフィール表示用カード
         │  │          
         │  ├─hooks              # カスタムフック
-        │  │      useClickOutside.tsx # 要素外クリック検知フック
+        │  │      useClickOutside.tsx # 要素外クリック検知用フック
         │  │      
-        │  ├─loaders            # Loader関数の共通処理
-        │  │      authTokenLoader.tsx # 認証トークン取得
-        │  │      userDataLoader.tsx  # ユーザーデータ取得
+        │  ├─loaders            # データロードのロジック
+        │  │      authTokenLoader.tsx # 認証トークンをロードするロジック
+        │  │      userDataLoader.tsx  # ユーザーデータをロードするロジック
         │  │      
-        │  ├─logs               # ログ管理
-        │  ├─mocks              # mswのAPIモック
-        │  │  │  browser.ts     # ブラウザ用モック設定
-        │  │  │  server.ts      # サーバー用モック設定
+        │  ├─mocks              # テスト用のモックデータやモックサーバー設定
+        │  │  │  browser.ts     # ブラウザモックの設定
+        │  │  │  server.ts      # サーバーモックの設定
         │  │  │  
         │  │  └─handlers        # モックハンドラー
         │  │          getMeHandler.ts # ユーザーデータ取得モック
@@ -146,31 +145,25 @@ C:.
         │  │      index.tsx     # トップページ
         │  │      login.tsx     # ログイン画面
         │  │      mypage.tsx    # マイページ
-        │  │      _index.tsx    # フォールバックルート
+        │  │      _index.tsx    # フォールバック用のルート
         │  │      
-        │  ├─tests              # テストコード。今回は未作成
-        │  └─utils              # ユーティリティ関数やヘルパー
-        │      │  cookies.ts    # クッキー操作関連
-        │      │  logger.ts     # ログユーティリティ。今回は未完成。
-        │      │  types.ts      # 型定義
+        │  └─utils              # ユーティリティ関数や共通ロジック
+        │      │  cookies.ts    # クッキー操作用関数
+        │      │  logger.ts     # ログ関連のユーティリティ関数
+        │      │  types.ts      # 型定義を格納
         │      │  
-        │      ├─apis           # API呼び出し関数
-        │      │      fetchLoginData.tsx  # ログインAPI呼び出し処理
-        │      │      fetchLogoutData.tsx # ログアウトAPI呼び出し処理
-        │      │      fetchUserData.tsx   # ユーザーデータAPI呼び出し処理
+        │      ├─apis           # API呼び出しロジック
+        │      │      fetchLoginData.tsx  # ログインデータを取得するAPI
+        │      │      fetchLogoutData.tsx # ログアウトデータを取得するAPI
+        │      │      fetchUserData.tsx   # ユーザーデータを取得するAPI
         │      │      
-        │      ├─errors         # エラー定義
-        │      │      AuthenticationError.tsx # 認証エラー
-        │      │      
-        │      └─logs           # ログ管理関連。今回は未作成
-        ├─build                # ビルドされた成果物。今回は特に使用しない。
-        ├─certs                # SSL証明書。LocalhostをHTTPSでアクセスするために必要。
-        │      cert.pem        # 証明書
-        │      key.pem         # 秘密鍵
-        │      readme.md       # 説明書
-        │      
+        │      └─errors         # エラー定義
+        │              AuthenticationError.tsx # 認証エラー
+        │              
+        ├─build                # ビルド成果物を格納
+        ├─certs                # SSL証明書や鍵
         └─public               # 公開用の静的ファイル
-                favicon.ico    # サイトアイコン
+                favicon.ico    # サイトのファビコン
 
 ```
 
@@ -180,8 +173,8 @@ Windows端末でcert.pemとkey.pemを生成する方法は下記に記載。
 https://github.com/dbd-fish/react_sample/issues/12#issuecomment-2570993736
 
 cert.pemとkey.pemを下記に格納。
-`sample_frontend_container\sample_remix_react\certs\cert.pem`
-`sample_frontend_container\sample_remix_react\certs\key.pem`
+`sample_frontend_container\sample_react-router\certs\cert.pem`
+`sample_frontend_container\sample_react-router\certs\key.pem`
 
 Docker環境を構築して下記コマンドを実行。
 ```Bash
@@ -190,7 +183,7 @@ docker-compose up --build
 
 frontendコンテナを起動して下記コマンドを実行
 ```Bash
-cd sample_remix_react
+cd sample_react-router
 npm run dev
 ```
 

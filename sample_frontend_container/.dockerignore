@@ -1,2 +1,2 @@
 # NOTE: node.jsのコンテナを作成する場合下記をdockerignoreに登録しないとエラーが発生する
-sample_remix_react/node_modules
+sample_react-router/node_modules
