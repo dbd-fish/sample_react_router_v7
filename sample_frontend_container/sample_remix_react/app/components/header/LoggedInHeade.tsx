@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import SearchForm from '~/components/forms/SearchForm'; // 検索フォームのコンポーネントをインポート
 import SiteTitle from '~/components/SiteTitle'; // サイトタイトル用のコンポーネントをインポート
 import useClickOutside from '~/hooks/useClickOutside'; // 外部クリック検知用のカスタムフックをインポート
-import { useLoaderData, useSubmit } from '@remix-run/react';
+import { useLoaderData, useSubmit } from 'react-router';
 import { LoaderDataType } from '~/utils/types';
 
 /**

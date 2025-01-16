@@ -4,25 +4,27 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
-    "dev": "remix vite:dev --host",
+    "build": "react-router build",
+    "dev": "react-router dev --host",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint ./app",
-    "start": "remix-serve ./build/server/index.js",
-    "typecheck": "tsc",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc",
     "format": "prettier --write ./app",
     "format:check": "prettier --check ./app"
   },
   "dependencies": {
-    "@remix-run/node": "^2.15.2",
-    "@remix-run/react": "^2.15.1",
-    "@remix-run/serve": "^2.15.1",
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
+    "@react-router/node": "^7.0.0",
+    "@react-router/serve": "^7.0.0",
     "eslint-config-prettier": "^9.1.0",
     "isbot": "^4.4.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router": "^7.0.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.15.1",
+    "@react-router/dev": "^7.0.0",
     "@types/node": "^22.10.5",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",

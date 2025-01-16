@@ -1,8 +1,4 @@
-import {
-  redirect,
-  type LoaderFunction,
-  type MetaFunction,
-} from '@remix-run/node';
+import { redirect, type LoaderFunction, type MetaFunction } from 'react-router';
 
 export const loader: LoaderFunction = async () => {
   return redirect('/home'); // 'home.tsx' にリダイレクト

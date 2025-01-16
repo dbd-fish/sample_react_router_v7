@@ -2,4 +2,6 @@
 sample_frontend_container/sample_remix_react/certs/cert.pem
 sample_frontend_container/sample_remix_react/certs/key.pem
 sample_frontend_container/sample_remix_react/app/logs/*
+sample_frontend_container/sample_remix_react/.react-router/
+
 cypress_container/cypress/screenshots/*
