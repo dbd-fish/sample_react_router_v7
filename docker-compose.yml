@@ -64,8 +64,8 @@ services:
       dockerfile: Dockerfile
     image: cypress/included:13.17.0
     container_name: cypress_container
-    environment:
-      DISPLAY: ${DISPLAY} # ホストのDISPLAY変数を渡す
+    # environment:
+    #   DISPLAY:  ${DISPLAY} # NOTE: GUIによるCypress起動ができないため保留とする
     volumes:
       - ./cypress_container:/e2e # テストコードをマウント
       - /tmp/.X11-unix:/tmp/.X11-unix # Xサーバーソケットを共有
