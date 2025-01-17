@@ -11,7 +11,7 @@ WORKDIR /app
 # プロジェクトのソースコード全体をコピー
 COPY . .
 
-# 作業ディレクトリを作成済みのRemixプロジェクトに変更して、依存関係をインストール
+# 作業ディレクトリを作成済みのReactRouterプロジェクトに変更して、依存関係をインストール
 WORKDIR /app/sample_react-router
 RUN npm install
 

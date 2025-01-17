@@ -1,5 +1,5 @@
 {
-  "name": "sample-remix-react",
+  "name": "sample-react-router",
   "private": true,
   "sideEffects": false,
   "type": "module",

@@ -1,5 +1,5 @@
 # リポジトリ概要
-Docker環境でReact(Remix)を使用してログイン画面、マイページ画面、ホーム画面を作成しました。
+Docker環境でReact(ReactRouter)を使用してログイン画面、マイページ画面、ホーム画面を作成しました。
 Cypress用のコンテナを作成してCypressによる自動テストを少し試してみました。
 
 ## ポイント
@@ -14,7 +14,7 @@ Cypress用のコンテナを作成してCypressによる自動テストを少し
     - docker-compose
 - フロントエンド:
     - React (^18.2.0)
-    - Remix (^2.15.1)
+    - ReactRouter (^2.15.1)
     - TypeScript (^5.1.6)
     - TailwindCSS (^3.4.17)
 - ビルドツール:
@@ -79,7 +79,7 @@ C:.
     ├─.vscode                 # VS Codeの設定ディレクトリ
     │      settings.json      # ワークスペース固有の設定
     │      
-    └─sample_react-router      # フロントエンドアプリケーションの主要ディレクトリ (Remix使用)
+    └─sample_react-router      # フロントエンドアプリケーションの主要ディレクトリ (ReactRouterを使用)
         │  .eslintrc.cjs      # ESLintの設定ファイル
         │  .gitignore         # Gitで追跡しないファイルを定義
         │  .prettierrc        # Prettierの設定ファイル
@@ -140,7 +140,7 @@ C:.
         │  │          loginHandler.ts  # ログイン処理モック
         │  │          logoutHandler.ts # ログアウト処理モック
         │  │          
-        │  ├─routes             # Remixのルート
+        │  ├─routes             # ReactRouterのルート用フォルダ
         │  │      home.tsx      # ホーム画面
         │  │      index.tsx     # トップページ
         │  │      login.tsx     # ログイン画面

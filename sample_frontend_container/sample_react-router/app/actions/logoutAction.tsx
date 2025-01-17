@@ -1,7 +1,7 @@
 import { redirect } from 'react-router';
 import { fetchLogoutData } from '~/utils/apis/fetchLogoutData';
 import { authTokenCookie } from '~/utils/cookies';
-// NOTE: Remixのバックエンドで上手く動作するロガーがないためコメントしておく
+// NOTE: ReactRouterのバックエンドで上手く動作するロガーがないためコメントしておく
 // import logger from '~/utils/logger';
 
 /**
