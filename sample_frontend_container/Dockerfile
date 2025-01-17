@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . .
 
 # 作業ディレクトリを作成済みのRemixプロジェクトに変更して、依存関係をインストール
-WORKDIR /app/sample_remix_react
+WORKDIR /app/sample_react-router
 RUN npm install
 
 # デフォルトのCMDをbashにしておく（デバッグや後の変更用）

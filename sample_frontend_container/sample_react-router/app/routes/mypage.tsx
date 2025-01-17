@@ -1,5 +1,3 @@
-// sample_frontend_container/sample_remix_react/app/routes/mypage.tsx
-
 import { LoaderFunction, ActionFunction, redirect } from 'react-router';
 import { useLoaderData } from 'react-router';
 import Header from '~/components/Header';

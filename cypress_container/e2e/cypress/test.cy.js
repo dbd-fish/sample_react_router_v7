@@ -20,13 +20,13 @@ describe('ログインテスト', () => {
   });
 
   it('ホーム画面のサンプルサイトリンクをクリックしてホーム画面に遷移', () => {
-    cy.visit('/home');
+    cy.visit('/');
 
     // サンプルサイトリンクをクリック
     cy.contains('a', 'サンプルサイト').click();
 
     // ホーム画面に遷移したことを確認
-    cy.url().should('eq', 'https://frontend:5173/home');
+    cy.url().should('eq', 'https://frontend:5173/');
   });
 
   it('ホーム画面からログアウト画面へ遷移', () => {
